@@ -24,7 +24,6 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
       audio = "",
       style = "",
     } = task.payload;
-    console.log("task:.apyload:::", task.payload);
 
     // Translate prompt if not in English
     const translatedPrompt = async () =>

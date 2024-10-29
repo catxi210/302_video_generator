@@ -36,7 +36,6 @@ import { HistoryModal } from "../task-history";
 const TaskProducer = () => {
   const [isOpen, setIsOpen] = React.useState(true);
   const clearTasksByType = useTaskStore((state) => state.clearTasksByType);
-  // const getTasksByType = useTaskStore((state) => state.getTasksByType);
   const videoTask = useVideoTask();
   const { t } = useClientTranslation();
 
@@ -44,7 +43,7 @@ const TaskProducer = () => {
     <Card className="w-full rounded-none">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <CardHeader className="flex-row items-center justify-between">
-          <div className="flex-1">
+          <div className="flex-1 space-y-1">
             <CardTitle>{t("v-gen:task.title")}</CardTitle>
             <CardDescription>
               {!videoTask.isOnProcess
