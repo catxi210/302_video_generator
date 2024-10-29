@@ -1,0 +1,129 @@
+{
+  "title": "AIビデオジェネレーター",
+  "desc": "AIを使用して様々なカスタマイズビデオを素早く生成",
+  "task": {
+    "title": "ビデオを作成",
+    "empty": "ビデオ生成タスクはありません",
+    "total": "合計{{count}}本のビデオ生成中",
+    "clear": "タスクをクリア"
+  },
+  "form": {
+    "model": {
+      "title": "ビデオモデル",
+      "desc": "モデルを選択",
+      "option": {
+        "luma": "Luma",
+        "kling": "Kling",
+        "runway": "Runway",
+        "cog": "智谱",
+        "minimax": "Minimax",
+        "pika": "Pika",
+        "genmo": "Mochi-V1"
+      }
+    },
+    "prompt": {
+      "title": "ビデオ内容",
+      "desc": "生成したいビデオの内容を入力してください"
+    },
+    "first_frame": {
+      "title": "ビデオ初フレーム",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "last_frame": {
+      "title": "ビデオ最後のフレーム",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "ratio": {
+      "title": "ビデオ比率",
+      "desc": "ビデオ生成比率を選択",
+      "option": {
+        "custom": "カスタム"
+      }
+    },
+    "type": {
+      "title": "生成モード",
+      "desc": "ビデオ生成モードを選択",
+      "option": {
+        "fast": "快速",
+        "hq": "高精細"
+      }
+    },
+    "time": {
+      "title": "ビデオ長さ",
+      "desc": "ビデオの長さを選選",
+      "option": {
+        "short": "5秒",
+        "long": "10秒"
+      }
+    },
+    "loop": {
+      "title": "ビデオループ",
+      "desc": "ビデオループを有効化するか選択",
+      "option": {
+        "open": "ループを有効化",
+        "close": "ループを無効化"
+      }
+    },
+    "audio": {
+      "title": "音響設定",
+      "desc": "ビデオの音響を有効化するか選択",
+      "option": {
+        "open": "音響を有効化",
+        "close": "音響を無効化"
+      }
+    },
+    "camera": {
+      "title": "カメラ制御",
+      "desc": "ビデオのカメラ方向を選択",
+      "option": {
+        "none": "なし",
+        "move_left": "左に移動",
+        "move_right": "右に移動",
+        "move_up": "上に移動",
+        "move_down": "下に移動",
+        "push_in": "プッシュイン",
+        "push_out": "プッシュアウト",
+        "pan_left": "左にパン",
+        "pan_right": "右にパン",
+        "orbit_left": "左に回転",
+        "orbit_right": "右に回転",
+        "grane_up": "上昇",
+        "grane_down": "下降"
+      }
+    },
+    "style": {
+      "title": "ビデオエフェクト",
+      "desc": "ビデオエフェクトを選択",
+      "option": {
+        "none": "なし",
+        "inflate": "膨張",
+        "melt": "溶融",
+        "explode": "爆発",
+        "squish": "押しつぶす",
+        "crush": "つぶす",
+        "cake_ify": "切り分け",
+        "ta_da": "隠す",
+        "deflate": "収縮",
+        "crumble": "崩壊",
+        "dissolve": "分解"
+      }
+    }
+  },
+  "action": {
+    "create_video": "ビデオを生成",
+    "extend_video": "ビデオを拡張",
+    "recreate_video": "再生成",
+    "edit_video": "再編集",
+    "download_video": "ビデオをダウンロード",
+    "delete_task": "タスクを削除",
+    "delete_video": "ビデオを削除"
+  },
+  "info": {
+    "video_on_create": "ビデオ生成中",
+    "video_on_extend": "ビデオ拡張中"
+  },
+  "example": {
+    "prompt": "朝の薄霧の中で、陽光が木々の間を通り抜け、まだらな光と影を大地にまぶしていた。遠くには、青翠の山々が重なり合って空と一体化している。近くでは、小川が澄んだ水を流し、岸辺には色とりどりの野花が咲き競っている。それらは大地のパレットのようだ。そよ風が吹き、花の香りと土の香りが混じり合って心地よい。この瞬間、天地はこんなにも静まり返り、時が止まったかのように心が落ち着くようだ",
+    "try": "試してみる"
+  }
+}
