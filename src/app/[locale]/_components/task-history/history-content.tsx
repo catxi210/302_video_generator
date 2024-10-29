@@ -46,7 +46,7 @@ export function HistoryContent() {
           {videoHistory.allHistorys.reverse().map((history) => {
             return (
               <li key={history.id}>
-                <div className="flex w-full flex-col items-center space-y-2 rounded-md bg-slate-200 p-4">
+                <div className="flex w-full flex-col items-center space-y-2 rounded-md bg-slate-200 p-4 dark:bg-slate-900">
                   <div className="flex w-full items-start justify-between space-x-2">
                     <div className="flex w-full flex-col">
                       <div className="h-[20px] text-base font-medium text-primary">
