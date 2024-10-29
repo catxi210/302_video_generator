@@ -21,14 +21,6 @@ import { VideoSchema } from "./schema";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 // Define the type for authentication data
 type DefaultVideoData = {
   model: string;
@@ -127,7 +119,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         setRatioOptions(OPTION_CONSTANTS.klingVideoOption);
         setShowFields([
           "model",
-          "Prompt",
+          "prompt",
           "firstFile",
           "firstFrame",
           "lastFile",
