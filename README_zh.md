@@ -2,7 +2,7 @@
 
 [中文](README_zh.md) | [English](README.md) | [日本語](README_ja.md)
 
-这是来自[302.AI](https://302.ai)的开源项目。你可以直接使用本项目生成AI视频，或根据自己的需求修改并自行部署。
+这是来自[302.AI](https://302.ai)的[AI视频生成器](https://302.ai/tools/vgen/)开源版本。你可以直接登录302.AI，零代码零基础使用在线版本，或根据自己的需求修改并自行部署。
 
 ## ✨ 302.AI介绍 ✨
 
@@ -34,7 +34,7 @@
 
 ## 开发&部署
 
-1. 克隆项目 `git clone https://github.com/302ai/pub_video_generator`
+1. 克隆项目 `git clone git@github.com:302ai/302_video_generator.git`
 2. 安装依赖 `pnpm install`
 3. 配置302的API KEY 参考.env.example
 4. 运行项目 `pnpm dev`
