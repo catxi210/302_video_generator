@@ -8,15 +8,12 @@ type LoaderProps = {
   className?: string;
 };
 
-// CircleLoader component: Displays a spinning SVG when loading, otherwise renders children
 export const CircleLoader = ({ loading, children, className }: LoaderProps) => {
-  if (!loading) return <>{children}</>; // Render children if not loading
+  if (!loading) return <>{children}</>;
 
   return (
     <div className={cn("flex w-full items-center justify-center", className)}>
       <div role="status" aria-label="Loading">
-        {" "}
-        {/* Provide accessible label */}
         <svg
           aria-hidden="true"
           className="inline size-8 animate-spin fill-yellow-400 text-gray-200 dark:text-gray-600"
@@ -38,7 +35,6 @@ export const CircleLoader = ({ loading, children, className }: LoaderProps) => {
   );
 };
 
-// DotLoader component: Displays three dots with flashing animation
 export const DotLoader = ({ className }: { className?: string }) => {
   return (
     <div

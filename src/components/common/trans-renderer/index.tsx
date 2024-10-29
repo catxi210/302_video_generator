@@ -17,8 +17,7 @@ const TransRenderer = ({
   const HOST_NAME = "302.AI";
   return (
     <Trans
-      // t={t}
-      i18nKey={transKey} // optional -> fallbacks to defaults if not provided
+      i18nKey={transKey}
       defaults={
         content.replace(HOST_NAME, `<site>${HOST_NAME}</site>`) ||
         "<bold>welcome</bold> <italic>to</italic> <site>{{name}}</site>"

@@ -18,19 +18,13 @@ function getLocale(request: NextRequest): Lang {
 
 export function middleware(request: NextRequest): Response | void {
   const { pathname } = request.nextUrl;
-
-  // Check if the path already includes a locale
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
 
-  // Return if locale is present in the path
   if (pathnameHasLocale) return;
 
-  // Get the best matching locale
   const locale = getLocale(request);
-
-  // Redirect to the path with the locale
   const redirectURL = new URL(request.nextUrl);
   redirectURL.pathname = `/${locale}${pathname}`;
 

@@ -69,7 +69,7 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
     queryKey: ["video", taskId],
     queryFn: () => generateVideo(taskData),
     retry: false,
-    enabled: !taskData.result, // 只在任务未完成时进行查询
+    enabled: !taskData.result,
   });
 
   // Extend Video

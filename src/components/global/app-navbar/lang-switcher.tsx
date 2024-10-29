@@ -21,16 +21,14 @@ type LangSwitcherProps = {
   locale: string;
 };
 export default function LangSwitcher({ locale }: LangSwitcherProps) {
-  const [lang, setLang] = useState(locale); // Initialize lang to the Locale symbol
+  const [lang, setLang] = useState(locale);
   const { replaceLocale } = useLocaleRouter();
 
-  // Handler for changing language
   const handlerChangeLang = (value: Lang) => {
     setLang(value);
     replaceLocale(value);
   };
 
-  // Init session language by locale
   useEffect(() => {
     useAppStore.getState().updateConfig({ language: locale });
   }, [locale]);
@@ -38,13 +36,11 @@ export default function LangSwitcher({ locale }: LangSwitcherProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {/* Trigger button for the dropdown menu */}
         <Button size="icon" variant="ghost">
-          <LanguagesIcon className="size-5" /> {/* Language icon */}
+          <LanguagesIcon className="size-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-12">
-        {/* Dropdown language selection */}
         <DropdownMenuRadioGroup
           value={lang}
           onValueChange={(value: string) => handlerChangeLang(value as Lang)}

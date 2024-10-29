@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -19,13 +18,6 @@ import { TaskType } from "@/stores/slices/task-slice";
 import type { VideoFormKey } from "./schema";
 import { VideoSchema } from "./schema";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-// Define the type for authentication data
 type DefaultVideoData = {
   model: string;
   prompt: string;
@@ -79,34 +71,18 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
   const lastFile = watch("lastFile");
 
   useEffect(() => {
-    // set ready for submit
-    if (firstFile || lastFile || promptValue) {
-      setIsReady(true);
-    } else {
-      setIsReady(false);
-    }
+    setIsReady(!!(firstFile || lastFile || promptValue));
 
-    // set frame imgages
     if (!firstFile) setValue("firstFrame", null);
     if (!lastFile) setValue("lastFrame", null);
 
-    // show crop modal if have image or model in list
-    if (!["kling", "pika"].includes(modelValue) && !firstFile && !lastFile) {
-      setIsNeedRatio(false);
-    } else {
+    if (["kling", "pika"].includes(modelValue) || firstFile || lastFile) {
       setIsNeedRatio(true);
     }
 
-    // set frame size
-    if (modelValue === "runway") {
-      setIsResize(true);
-    } else {
-      setIsResize(false);
-    }
+    setIsResize(modelValue === "runway");
 
-    // Dynamically update visible fields based on model value
     switch (modelValue) {
-      // set if show files
       case "luma":
         setRatioOptions(OPTION_CONSTANTS.lumaVideoOption);
         setShowFields([
@@ -122,7 +98,6 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         break;
       case "kling":
         setRatioOptions(OPTION_CONSTANTS.klingVideoOption);
-
         if (typeValue === "fast" || firstFile || lastFile) {
           setValue("time", "5s");
           setShowFields([
@@ -150,9 +125,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         }
         break;
       case "runway":
-        // 设置比例
         setRatioOptions(OPTION_CONSTANTS.runwayVideoOption);
-        // 有图片可以选高清或快速生成
         if (firstFile || lastFile) {
           setShowFields([
             "model",
@@ -199,7 +172,6 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
       case "genmo":
         setShowFields(["model", "prompt"]);
         break;
-
       default:
         setRatioOptions(OPTION_CONSTANTS.defaultVideoOption);
         setShowFields([
@@ -221,21 +193,17 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
     }
   }, [modelValue, promptValue, typeValue, firstFile, lastFile, setValue]);
 
-  // Restore form
   useEffect(() => {
-    // 使用外部组件更新时回填表单
     Object.entries(videoForm).forEach(([key, value]) =>
       setValue(key as VideoFormKey, value)
     );
   }, [videoForm, setValue]);
 
-  // 提交表单
   const _onSubmit = (data: DefaultVideoData) => {
     const filteredData = Object.fromEntries(
       Object.entries(data).filter(([key]) => showFields.includes(key))
     );
     addTask(filteredData, TaskType.VIDEO_GENERATION);
-    // Submit filteredData instead of data
   };
 
   const handleCropConfirm = (data: {
@@ -243,11 +211,10 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
     lastFrame: File | null;
     ratio: string;
   }) => {
-    // 使用外部组件更新时回填表单
     Object.entries(data).forEach(([key, value]) => {
       setValue(key as VideoFormKey, value);
     });
-    handleSubmit(_onSubmit)(); // Resubmit with chosen ratio
+    handleSubmit(_onSubmit)();
   };
 
   return (

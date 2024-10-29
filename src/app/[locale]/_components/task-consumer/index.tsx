@@ -34,12 +34,7 @@ const TaskConsumer = ({ className }: TaskConsumerProps) => {
     >
       <div className="flex w-full flex-col gap-4">
         {videoTask.allTasks.map((task, index) => (
-          <TaskItem
-            top={index}
-            taskData={task}
-            key={task.id}
-            // className="bg-white shadow-lg dark:bg-black"
-          />
+          <TaskItem top={index} taskData={task} key={task.id} />
         ))}
       </div>
     </div>
