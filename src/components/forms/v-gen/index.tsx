@@ -21,6 +21,8 @@ import { VideoSchema } from "./schema";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // Define the type for authentication data
 type DefaultVideoData = {
   model: string;
@@ -47,7 +49,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
   const addTask = useTaskStore((state) => state.addTask);
   const [isReady, setIsReady] = useState(false);
   const [showFields, setShowFields] = useState<string[]>([]);
-  const [isNeedCrop, setIsNeedCrop] = useState(false);
+  const [isNeedRatio, setIsNeedRatio] = useState(false);
   const [isResize, setIsResize] = useState(false);
   const [ratioOptions, setRatioOptions] = useState<OptionProps[]>(
     OPTION_CONSTANTS.defaultVideoOption
@@ -87,9 +89,9 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
     // show crop modal if have image or model in list
     if (!["kling", "pika"].includes(modelValue) && !firstFile && !lastFile) {
-      setIsNeedCrop(false);
+      setIsNeedRatio(false);
     } else {
-      setIsNeedCrop(true);
+      setIsNeedRatio(true);
     }
 
     // set frame size
@@ -194,6 +196,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   // 提交表单
   const _onSubmit = (data: DefaultVideoData) => {
+    console.log("submit::raito::data::::, data");
     const filteredData = Object.fromEntries(
       Object.entries(data).filter(([key]) => showFields.includes(key))
     );
@@ -208,6 +211,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
   }) => {
     // 使用外部组件更新时回填表单
     Object.entries(data).forEach(([key, value]) => {
+      console.log("value::", value);
       setValue(key as VideoFormKey, value);
     });
     handleSubmit(_onSubmit)(); // Resubmit with chosen ratio
@@ -232,9 +236,9 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
           })}
         />
       ))}
-      {isNeedCrop ? (
+      {isNeedRatio ? (
         <ImageCropper
-          disable={disabled}
+          disable={disabled || !isReady}
           ratioOptions={ratioOptions}
           originFirstFile={firstFile}
           originLastFile={lastFile}

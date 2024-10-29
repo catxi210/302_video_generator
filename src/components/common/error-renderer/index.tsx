@@ -34,9 +34,6 @@ function ErrorRenderer({ info }: ErrorRendererProps) {
             msg = info.error[`message_${langToCountry(language)}`];
           }
         }
-        if (msg) {
-          msg = msg.replace("302.AI", "<site>302.AI</site>");
-        }
       }
 
       setContent(msg || "Unknow Error");
