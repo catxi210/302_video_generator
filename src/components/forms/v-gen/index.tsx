@@ -23,6 +23,8 @@ import { VideoSchema } from "./schema";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // Define the type for authentication data
 type DefaultVideoData = {
   model: string;
@@ -120,17 +122,32 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         break;
       case "kling":
         setRatioOptions(OPTION_CONSTANTS.klingVideoOption);
-        setShowFields([
-          "model",
-          "prompt",
-          "firstFile",
-          "firstFrame",
-          "lastFile",
-          "lastFrame",
-          "ratio",
-          "type",
-          "time",
-        ]);
+
+        if (typeValue === "fast" || firstFile || lastFile) {
+          setValue("time", "5s");
+          setShowFields([
+            "model",
+            "prompt",
+            "firstFile",
+            "firstFrame",
+            "lastFile",
+            "lastFrame",
+            "ratio",
+            "type",
+          ]);
+        } else {
+          setShowFields([
+            "model",
+            "prompt",
+            "firstFile",
+            "firstFrame",
+            "lastFile",
+            "lastFrame",
+            "ratio",
+            "type",
+            "time",
+          ]);
+        }
         break;
       case "runway":
         // 设置比例
