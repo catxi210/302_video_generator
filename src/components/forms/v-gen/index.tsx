@@ -21,6 +21,8 @@ import { VideoSchema } from "./schema";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // Define the type for authentication data
 type DefaultVideoData = {
   model: string;
@@ -70,6 +72,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   const modelValue = watch("model");
   const promptValue = watch("prompt");
+  const typeValue = watch("type");
   const firstFile = watch("firstFile");
   const lastFile = watch("lastFile");
 
@@ -130,16 +133,31 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         ]);
         break;
       case "runway":
+        // 设置比例
         setRatioOptions(OPTION_CONSTANTS.runwayVideoOption);
-        setShowFields([
-          "model",
-          "prompt",
-          "firstFile",
-          "firstFrame",
-          "lastFile",
-          "lastFrame",
-          "time",
-        ]);
+        // 有图片可以选高清或快速生成
+        if (firstFile || lastFile) {
+          setShowFields([
+            "model",
+            "prompt",
+            "firstFile",
+            "firstFrame",
+            "lastFile",
+            "lastFrame",
+            "type",
+            "time",
+          ]);
+        } else {
+          setShowFields([
+            "model",
+            "prompt",
+            "firstFile",
+            "firstFrame",
+            "lastFile",
+            "lastFrame",
+            "time",
+          ]);
+        }
         break;
       case "cog":
         setRatioOptions(OPTION_CONSTANTS.cogVideoOption);
@@ -184,7 +202,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         ]);
         break;
     }
-  }, [modelValue, promptValue, firstFile, lastFile, setValue]);
+  }, [modelValue, promptValue, typeValue, firstFile, lastFile, setValue]);
 
   // Restore form
   useEffect(() => {
