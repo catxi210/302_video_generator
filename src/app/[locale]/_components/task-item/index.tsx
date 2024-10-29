@@ -141,7 +141,7 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                       disabled={
                         isFetching ||
                         ExtendVideoMutation.isPending ||
-                        !taskData.result
+                        !taskData.result?.resultId
                       }
                     >
                       <UnfoldHorizontal size={16} />

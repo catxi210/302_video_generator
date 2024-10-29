@@ -21,8 +21,6 @@ import { VideoSchema } from "./schema";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 // Define the type for authentication data
 type DefaultVideoData = {
   model: string;
@@ -126,6 +124,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
           "firstFrame",
           "lastFile",
           "lastFrame",
+          "ratio",
           "type",
           "time",
         ]);
@@ -157,6 +156,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
           "prompt",
           "firstFile",
           "firstFrame",
+          "ratio",
           "style",
           "audio",
         ]);
@@ -196,7 +196,6 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   // 提交表单
   const _onSubmit = (data: DefaultVideoData) => {
-    console.log("submit::raito::data::::, data");
     const filteredData = Object.fromEntries(
       Object.entries(data).filter(([key]) => showFields.includes(key))
     );
@@ -211,7 +210,6 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
   }) => {
     // 使用外部组件更新时回填表单
     Object.entries(data).forEach(([key, value]) => {
-      console.log("value::", value);
       setValue(key as VideoFormKey, value);
     });
     handleSubmit(_onSubmit)(); // Resubmit with chosen ratio
