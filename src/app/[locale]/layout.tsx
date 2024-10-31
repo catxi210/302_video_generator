@@ -14,9 +14,6 @@ import "@/styles/globals.css";
 const AppAuth = dynamic(() => import("@/components/global/app-auth"), {
   ssr: false,
 });
-const AppChat = dynamic(() => import("@/components/global/app-chat"), {
-  ssr: false,
-});
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -56,7 +53,6 @@ const RootLayout = ({
             <AppFooter locale={locale} />
           </AppQeury>
         </AppTheme>
-        <AppChat />
         <AppMessage />
       </body>
     </html>
