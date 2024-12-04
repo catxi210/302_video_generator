@@ -1,4 +1,4 @@
-# <p align="center">🎬 AIビデオジェネレータ 🚀✨</p>
+# <p align="center">🎬 AI ビデオジェネレーター 🚀✨</p>
 
 <p align="center">AI ビデオ生成器は、テキストと画像を元に、ルマ（Luma）、ランウェイ・ジェン 3（Runway gen-3）、クリング・ケリング（Kling Keling）、コグビデオ X 智譜（CogVideoX Zhipu）などの業界をリードするビデオの大規模モデルを通じて、高品質の AI ビデオを生成します。</p>
 
