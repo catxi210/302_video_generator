@@ -6,6 +6,7 @@
 
 <p align="center"><a href="README zh.md">中文</a> | <a href="README.md">English</a> | <a href="README_ja.md">日本語</a></p>
 
+![v-gen](docs/AI视频生成器en.png)
 
 This is the open-source version of the [AI Video Generator](https://302.ai/tools/vgen/) from [302.AI](https://302.ai). You can log in directly to 302.AI, use the online version with zero code and zero background, or modify and deploy it according to your needs.
 
