@@ -6,6 +6,7 @@
 
 <p align="center"><a href="README zh.md">中文</a> | <a href="README.md">English</a> | <a href="README_ja.md">日本語</a></p>
 
+![v-gen](docs/AI视频生成器jp.png)
 
 これは[302.AI](https://302.ai)による[AIビデオジェネレーター](https://302.ai/tools/vgen/)のオープンソース版です。302.AIに直接ログインしてコード不要でオンライン版を利用するか、ニーズに合わせて修正して自分でデプロイできます。
 
