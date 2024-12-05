@@ -2,9 +2,9 @@
 
 <p align="center">AI ビデオ生成器は、テキストと画像を元に、ルマ（Luma）、ランウェイ・ジェン 3（Runway gen-3）、クリング・ケリング（Kling Keling）、コグビデオ X 智譜（CogVideoX Zhipu）などの業界をリードするビデオの大規模モデルを通じて、高品質の AI ビデオを生成します。</p>
 
-<p align="center"><a href="https://302.ai/tools/word/" target="blank"><img src="https://file.302ai.cn/gpt/imgs/github/302_badge.png" /></a></p >
+<p align="center"><a href="https://302.ai/ja/tools/vgen/" target="blank"><img src="https://file.302ai.cn/gpt/imgs/github/302_badge.png" /></a></p >
 
-<p align="center"><a href="README zh.md">中文</a> | <a href="README.md">English</a> | <a href="README_ja.md">日本語</a></p>
+<p align="center"><a href="README_zh.md">中文</a> | <a href="README.md">English</a> | <a href="README_ja.md">日本語</a></p>
 
 ![v-gen](docs/AI视频生成器jp.png)
 
