@@ -2,9 +2,9 @@
 
 <p align="center">The AI video generator creates high-quality AI videos based on texts and pictures through industry-leading video large models such as Luma, Runway gen-3, Kling Keling, and CogVideoX Zhipu.</p>
 
-<p align="center"><a href="https://302.ai/tools/word/" target="blank"><img src="https://file.302ai.cn/gpt/imgs/github/302_badge.png" /></a></p >
+<p align="center"><a href="https://302.ai/en/tools/vgen/" target="blank"><img src="https://file.302ai.cn/gpt/imgs/github/302_badge.png" /></a></p >
 
-<p align="center"><a href="README zh.md">中文</a> | <a href="README.md">English</a> | <a href="README_ja.md">日本語</a></p>
+<p align="center"><a href="README_zh.md">中文</a> | <a href="README.md">English</a> | <a href="README_ja.md">日本語</a></p>
 
 ![v-gen](docs/AI视频生成器en.png)
 
