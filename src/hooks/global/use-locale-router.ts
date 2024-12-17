@@ -8,6 +8,12 @@ export const useLocaleRouter = () => {
   const pathname = usePathname();
   const { locale } = useParams();
 
+  // check if auth page
+  const isAuthPage = useMemo(
+    () => pathname.includes(`/${locale}/auth`),
+    [pathname, locale]
+  );
+
   // check if need auth router
   const isAuthRouter = useMemo(
     () =>
@@ -42,6 +48,7 @@ export const useLocaleRouter = () => {
   };
 
   return {
+    isAuthPage,
     isAuthRouter,
     replaceLocale,
     replaceRouter,

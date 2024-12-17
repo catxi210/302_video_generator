@@ -36,8 +36,8 @@
     "not_found": "Page not found",
     "unknown_error": "An unknown error occurred, please contact customer service",
     "network_error": "Network service error, please check your network status or try again later!",
-    "code_invalid": "Invalid share code, for more please visit <site>302.AI</site>",
-    "tool_disabled": "This tool is disabled, for more please visit <site>302.AI</site>",
-    "tool_deleted": "This tool has been deleted, for more please visit <site>302.AI</site>"
+    "code_invalid": "Invalid share code, for more please visit 302.AI",
+    "tool_disabled": "This tool is disabled, for more please visit 302.AI",
+    "tool_deleted": "This tool has been deleted, for more please visit 302.AI"
   }
 }

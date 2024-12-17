@@ -21,7 +21,7 @@ const TaskConsumer = ({ className }: TaskConsumerProps) => {
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
       }
     }, 30);
-  }, [videoTask.onProcessTasks]); //
+  }, [videoTask.onProcessTasks]);
 
   if (!videoTask.allTasks.length) {
     return <TaskExample />;

@@ -1,15 +1,22 @@
-import { VIDEO_FORM, VideoFormProps } from "./forms";
+import {
+  AuthFormProps,
+  SIGN_IN_FORM,
+  VIDEO_FORM,
+  VideoFormProps,
+} from "./forms";
 import { APP_ROUTE_MENU, MenuProps } from "./menus";
 import {
   APP_THEME_OPTION,
   COG_RATIO_OPTION,
-  DEFAULT_RATIO_OPTION,
-  KLING_RATIO_OPTION,
-  LUMA_RATIO_OPTION,
+  CUSTOMER_RATIO_OPTION,
+  DEFAULT_RATIO_OPTION, // HAIPER_RATIO_OPTION,
+  KLING_RATIO_OPTION, // PIXVERSE_RATIO_OPTION,
+  LIGHTRICKS_RATIO_OPTION, // LUMA_RATIO_OPTION,
   MINIMAX_RATIO_OPTION,
   OptionProps,
   PIKA_RATIO_OPTION,
   RUNWAY_RATIO_OPTION,
+  VIDU_RATIO_OPTION,
 } from "./options";
 
 // APP
@@ -25,10 +32,12 @@ export const APP_CONSTANTS: AppConstantsProps = {
 
 // Form
 type FormConstantsProps = {
+  signInForm: AuthFormProps[];
   videoForm: VideoFormProps[];
 };
 
 export const FORM_CONSTANTS: FormConstantsProps = {
+  signInForm: SIGN_IN_FORM,
   videoForm: VIDEO_FORM,
 };
 
@@ -40,7 +49,11 @@ type OptionConstansProps = {
   pikaVideoOption: OptionProps[];
   runwayVideoOption: OptionProps[];
   cogVideoOption: OptionProps[];
+  haiperVideoOption: OptionProps[];
   lumaVideoOption: OptionProps[];
+  pixverseVideoOption: OptionProps[];
+  lightricksVideoOption: OptionProps[];
+  viduVideoOption: OptionProps[];
 };
 
 export const OPTION_CONSTANTS: OptionConstansProps = {
@@ -50,5 +63,9 @@ export const OPTION_CONSTANTS: OptionConstansProps = {
   pikaVideoOption: PIKA_RATIO_OPTION,
   runwayVideoOption: RUNWAY_RATIO_OPTION,
   cogVideoOption: COG_RATIO_OPTION,
-  lumaVideoOption: LUMA_RATIO_OPTION,
+  haiperVideoOption: CUSTOMER_RATIO_OPTION,
+  lumaVideoOption: CUSTOMER_RATIO_OPTION,
+  pixverseVideoOption: CUSTOMER_RATIO_OPTION,
+  lightricksVideoOption: LIGHTRICKS_RATIO_OPTION,
+  viduVideoOption: VIDU_RATIO_OPTION,
 };

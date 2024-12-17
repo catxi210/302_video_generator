@@ -119,6 +119,7 @@ const FormGenerator = ({
     <Label htmlFor={`input-${name}`} className={className}>
       <p>{label && t(label)}</p>
       <Input
+        className={className}
         id={`input-${name}`}
         type={inputType}
         placeholder={placeholder && t(placeholder)}
@@ -174,7 +175,7 @@ const FormGenerator = ({
     const watchCheckbox = watch(name, true);
     return (
       <Label
-        className={cn("flex items-center gap-2", className)}
+        className={cn("flex gap-2", className)}
         htmlFor={`checkbox-${label}`}
       >
         <Checkbox

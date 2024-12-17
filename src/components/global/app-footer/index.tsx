@@ -1,18 +1,22 @@
-import AppLogo from "@/components/global/app-logo";
-import { serverTranslation } from "@/i18n";
+"use client";
 
-type AppFooterProps = {
-  locale: string;
-};
-const AppFooter = async ({ locale }: AppFooterProps) => {
-  const { t } = await serverTranslation(locale);
+import AppLogo from "@/components/global/app-logo";
+import { useClientTranslation, useShowBrand } from "@/hooks/global";
+
+const AppFooter = () => {
+  const showBrand = useShowBrand();
+  const { t } = useClientTranslation();
   return (
     <footer className="flex w-full">
       <div className="flex w-full flex-col items-center justify-center space-y-1 p-1">
-        <div className="flex items-center justify-center">
-          <div className="text-xs text-[#666]">{t("global:footer.title")}</div>
-          <AppLogo className="w-12" />
-        </div>
+        {showBrand && (
+          <div className="flex items-center justify-center">
+            <div className="text-xs text-[#666]">
+              {t("global:footer.title")}
+            </div>
+            <AppLogo className="w-12" />
+          </div>
+        )}
         <div className="flex justify-center text-center text-xs text-gray-400">
           {t("global:footer.desc")}
         </div>

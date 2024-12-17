@@ -233,15 +233,27 @@ export default class FileManager {
     img.src = src;
   };
 
+  static urlToBase64 = async (url: string) => {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
   static downloadImage = async (url: string, name?: string) => {
+    const base64Url = (await this.urlToBase64(url)) as string;
     const file = await this.imageToFile(url);
     const currentTime = this.getNowformatTime();
     const metaType = file?.type.split("/")[1] || url.split(".")[1];
     const resultName =
       name || `result-${currentTime}.${metaType.split("+")[0]}`;
-    const localUrl = URL.createObjectURL(file as File);
+    // const localUrl = URL.createObjectURL(file as File);
     const link = document.createElement("a");
-    link.href = localUrl;
+    link.href = base64Url;
     link.download = resultName;
 
     link.dispatchEvent(
@@ -257,23 +269,21 @@ export default class FileManager {
     }, 300);
   };
 
-  static downloadVideo = (url: string, name?: string) => {
-    fetch(url)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const currentTime = this.getNowformatTime();
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = name || `result-${currentTime}.mp4`;
-        link.style.display = "none";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
-      })
-      .catch((error) => {
-        console.error("下载视频出错:", error);
-      });
+  static downloadVideo = async (url: string, name?: string) => {
+    try {
+      const base64Url = (await this.urlToBase64(url)) as string;
+      const currentTime = this.getNowformatTime();
+      const link = document.createElement("a");
+      link.href = base64Url;
+      link.download = name || `result-${currentTime}.mp4`;
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error("Download video error:", error);
+    }
   };
 
   static getNowformatTime = () => {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const FileSchema = z.instanceof(File);
+const FileSchema = typeof File === "undefined" ? z.any() : z.instanceof(File);
 
 export type VideoFormKey =
   | "model"
@@ -9,13 +9,21 @@ export type VideoFormKey =
   | "lastFile"
   | "firstFrame"
   | "lastFrame"
+  | "thirdFile"
+  | "thirdFrame"
   | "ratio"
   | "type"
   | "time"
   | "loop"
   | "audio"
   | "camera"
-  | "style";
+  | "style"
+  | "template"
+  | "viduType"
+  | "viduStyle"
+  | "viduTime"
+  | "viduResolution"
+  | "viduScene";
 
 export const VideoSchema = z.object({
   model: z.string().optional(),
@@ -24,6 +32,8 @@ export const VideoSchema = z.object({
   lastFile: z.union([FileSchema, z.null()]).optional(),
   firstFrame: z.union([FileSchema, z.null()]).optional(),
   lastFrame: z.union([FileSchema, z.null()]).optional(),
+  thirdFile: z.union([FileSchema, z.null()]).optional(),
+  thirdFrame: z.union([FileSchema, z.null()]).optional(),
   ratio: z.string().optional(),
   type: z.string().optional(),
   time: z.string().optional(),
@@ -31,4 +41,10 @@ export const VideoSchema = z.object({
   audio: z.string().optional(),
   camera: z.string().optional(),
   style: z.string().optional(),
+  template: z.string().optional(),
+  viduType: z.string().optional(),
+  viduStyle: z.string().optional(),
+  viduTime: z.string().optional(),
+  viduResolution: z.string().optional(),
+  viduScene: z.string().optional(),
 });

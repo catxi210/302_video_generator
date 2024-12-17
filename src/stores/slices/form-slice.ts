@@ -14,6 +14,12 @@ interface VideoFormData {
   camera?: string;
   audio?: string;
   style?: string;
+  template?: string;
+  viduType?: string;
+  viduStyle?: string;
+  viduTime?: string;
+  viduResolution?: string;
+  viduScene?: string;
 }
 
 interface FormDefaults {
@@ -40,6 +46,12 @@ const defaultValues: FormDefaults = {
     audio: "false",
     camera: "none",
     style: "none",
+    template: "303624537709312",
+    viduType: "general",
+    viduStyle: "general",
+    viduTime: "4",
+    viduResolution: "512",
+    viduScene: "hug",
   },
 };
 

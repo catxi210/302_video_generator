@@ -10,6 +10,7 @@ type ConfigState = {
   modelName?: string;
   language?: string;
   info?: string;
+  showBrand: string;
 };
 
 type ConfigActions = {
@@ -30,5 +31,6 @@ export const createConfigSlice: StateCreator<
   apiKey: "",
   modelName: "",
   info: "",
+  showBrand: env.NEXT_PUBLIC_SHOW_BRAND,
   updateConfig: (fields) => set(produce((state) => ({ ...state, ...fields }))),
 });

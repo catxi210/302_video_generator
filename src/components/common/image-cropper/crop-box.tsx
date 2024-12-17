@@ -24,7 +24,7 @@ const CropBox = ({ src, ratio, setCanvas }: PropsData) => {
     img.onload = () => {
       setTimeout(() => {
         setImage(img);
-      }, 200);
+      }, 300);
     };
     img.onerror = () => {
       console.log("Load image error");
@@ -36,7 +36,7 @@ const CropBox = ({ src, ratio, setCanvas }: PropsData) => {
     if (cropperRef.current) {
       setTimeout(() => {
         setCanvas(cropperRef.current.getCanvas());
-      }, 200);
+      }, 300);
     }
   }, [image, cropperRef, setCanvas, ratio]);
 

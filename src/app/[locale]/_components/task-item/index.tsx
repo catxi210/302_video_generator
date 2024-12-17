@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import Image from "next/image";
@@ -7,11 +6,14 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {
+  ChevronUpSquareIcon,
   Download,
   Edit,
+  RectangleHorizontal,
   RotateCcwIcon,
   Trash2Icon,
   UnfoldHorizontal,
+  Wand2,
 } from "lucide-react";
 
 import ErrorRenderer from "@/components/common/error-renderer";
@@ -26,6 +28,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -37,8 +53,6 @@ import { cn } from "@/lib/utils";
 import { extendVideo, generateVideo } from "@/services/v-gen";
 import { useFormStore, useHistoryStore, useTaskStore } from "@/stores";
 import { HistoryType } from "@/stores/slices/history-slice";
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -68,7 +82,7 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
   } = useQuery({
     queryKey: ["video", taskId],
     queryFn: () => generateVideo(taskData),
-    retry: false,
+    retry: 2,
     enabled: !taskData.result,
   });
 
@@ -83,9 +97,51 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
     },
   });
 
+  // State for extension dialog
+  const [showDialog, setShowDialog] = useState(false);
+  const [extensionType, setExtensionType] = useState("");
+  const [extensionPrompt, setExtensionPrompt] = useState("");
+  const [selectedRatio, setSelectedRatio] = useState("5:3");
+  const [selectedSeconds, setSelectedSeconds] = useState(5);
+  const [structureTransformation, setStructureTransformation] = useState(0.9);
+  // const [selectedDuration, setSelectedDuration] = useState(4);
+  // const [selectedResolution, setSelectedResolution] = useState("720p");
+
   // Handler Extend Video
-  const handleExtendVideo = () => {
-    ExtendVideoMutation.mutate(taskData);
+  const handleExtendVideo = (type: "ratio" | "style" | "time" | "upscale") => {
+    setExtensionType(type);
+    if (type === "time") {
+      ExtendVideoMutation.mutate({ ...taskData, extendType: type });
+    } else {
+      setShowDialog(true);
+    }
+  };
+
+  // Handle extension submission
+  const handleSubmit = () => {
+    setShowDialog(false);
+    const payload = {
+      ...taskData,
+      extendType: extensionType,
+      extendRatio: extensionType === "ratio" ? selectedRatio : undefined,
+      extendPrompt: extensionPrompt,
+      extendSeconds: selectedSeconds,
+      structureTransformation: structureTransformation,
+      // extendDuration: selectedDuration,
+      // extendResolution: selectedResolution,
+    };
+    ExtendVideoMutation.mutate(payload);
+  };
+
+  // Reset dialog state when closing
+  const handleDialogClose = () => {
+    setShowDialog(false);
+    setExtensionPrompt("");
+    setSelectedRatio("5:3");
+    setSelectedSeconds(5);
+    setStructureTransformation(0.9);
+    // setSelectedDuration(4);
+    // setSelectedResolution("720p");
   };
 
   // Restore Video
@@ -114,7 +170,7 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
   }, [taskData.payload]);
 
   return (
-    <Card className={cn("w-full] relative rounded-none")}>
+    <Card className={cn("relative w-full rounded-none")}>
       <CardHeader className="pb-2">
         <CardTitle>
           <div className="absolute left-5 top-[-4px] w-8 rounded-b-sm border bg-primary py-5 text-center text-white shadow-2xl">
@@ -130,6 +186,32 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
               </span>
             </div>
             <div className="flex w-full justify-end gap-2 md:justify-end">
+              {["vidu"].includes(taskData.payload.model) && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className="hover:border-purple-500 hover:text-purple-500"
+                        size={"sm"}
+                        onClick={() => handleExtendVideo("upscale")}
+                        disabled={
+                          isFetching ||
+                          ExtendVideoMutation.isPending ||
+                          !taskData.result?.resultId ||
+                          taskData.payload.viduTime === "8"
+                        }
+                      >
+                        <ChevronUpSquareIcon size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("v-gen:action.extend_video_upscale")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -137,21 +219,69 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                       variant={"outline"}
                       className="hover:border-purple-500 hover:text-purple-500"
                       size={"sm"}
-                      onClick={handleExtendVideo}
+                      onClick={() => handleExtendVideo("style")}
                       disabled={
                         isFetching ||
                         ExtendVideoMutation.isPending ||
-                        !taskData.result?.resultId
+                        !taskData.result?.videoUrl
                       }
                     >
-                      <UnfoldHorizontal size={16} />
+                      <Wand2 size={16} />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>{t("v-gen:action.extend_video")}</p>
+                    <p>{t("v-gen:action.extend_video_style")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className="hover:border-purple-500 hover:text-purple-500"
+                      size={"sm"}
+                      onClick={() => handleExtendVideo("ratio")}
+                      disabled={
+                        isFetching ||
+                        ExtendVideoMutation.isPending ||
+                        !taskData.result?.videoUrl
+                      }
+                    >
+                      <RectangleHorizontal size={16} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t("v-gen:action.extend_video_ratio")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              {["kling", "luma"].includes(taskData.payload.model) && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className="hover:border-purple-500 hover:text-purple-500"
+                        size={"sm"}
+                        onClick={() => handleExtendVideo("time")}
+                        disabled={
+                          isFetching ||
+                          ExtendVideoMutation.isPending ||
+                          !taskData.result?.resultId
+                        }
+                      >
+                        <UnfoldHorizontal size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("v-gen:action.extend_video_time")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
 
               <TooltipProvider>
                 <Tooltip>
@@ -194,7 +324,6 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
-                      title="Edit"
                       variant={"outline"}
                       size={"icon"}
                       className="hover:border-red-500 hover:text-red-500"
@@ -268,6 +397,135 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
           )}
         </div>
       </CardContent>
+
+      <Dialog
+        open={showDialog}
+        onOpenChange={(open) => {
+          if (!open) handleDialogClose();
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="mb-4 text-lg font-medium">
+              {extensionType === "ratio"
+                ? t("v-gen:dialog.extend_ratio.title")
+                : extensionType === "style"
+                  ? t("v-gen:dialog.extend_style.title")
+                  : t("v-gen:dialog.extend_upscale.title")}
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">
+              {extensionType === "ratio"
+                ? t("v-gen:dialog.extend_ratio.description")
+                : extensionType === "style"
+                  ? t("v-gen:dialog.extend_style.description")
+                  : t("v-gen:dialog.extend_upscale.description")}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-6">
+            {extensionType !== "upscale" && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  {extensionType === "ratio"
+                    ? t("v-gen:dialog.video_content")
+                    : t("v-gen:dialog.video_content_style")}
+                </label>
+                <input
+                  type="text"
+                  value={extensionPrompt}
+                  onChange={(e) => setExtensionPrompt(e.target.value)}
+                  className="w-full rounded-md border px-3 py-1.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder={
+                    extensionType === "ratio"
+                      ? t("v-gen:dialog.video_content_placeholder")
+                      : t("v-gen:dialog.video_content_style_placeholder")
+                  }
+                />
+              </div>
+            )}
+
+            {extensionType === "style" && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  {t("v-gen:dialog.duration")}
+                </label>
+                <Select
+                  value={selectedSeconds.toString()}
+                  onValueChange={(value) => setSelectedSeconds(parseInt(value))}
+                >
+                  <SelectTrigger className="h-9 w-full">
+                    <SelectValue
+                      placeholder={t("v-gen:dialog.select_duration")}
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">
+                      5{t("v-gen:dialog.seconds")}
+                    </SelectItem>
+                    <SelectItem value="10">
+                      10{t("v-gen:dialog.seconds")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {extensionType === "ratio" && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">
+                  {t("v-gen:dialog.video_ratio")}
+                </label>
+                <div className="flex gap-4">
+                  <Button
+                    className={cn(
+                      "h-9 flex-1",
+                      selectedRatio === "5:3"
+                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                        : ""
+                    )}
+                    variant={selectedRatio === "5:3" ? "default" : "outline"}
+                    onClick={() => setSelectedRatio("5:3")}
+                  >
+                    {t("v-gen:dialog.extend_ratio.horizontal_screen")}
+                  </Button>
+                  <Button
+                    className={cn(
+                      "h-9 flex-1",
+                      selectedRatio === "3:5"
+                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                        : ""
+                    )}
+                    variant={selectedRatio === "3:5" ? "default" : "outline"}
+                    onClick={() => setSelectedRatio("3:5")}
+                  >
+                    {t("v-gen:dialog.extend_ratio.vertical_screen")}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-2 border-t pt-4">
+              <Button
+                variant="secondary"
+                onClick={handleDialogClose}
+                className="h-9"
+              >
+                {t("v-gen:dialog.cancel")}
+              </Button>
+              <Button
+                variant="default"
+                onClick={handleSubmit}
+                className="h-9"
+                disabled={ExtendVideoMutation.isPending}
+              >
+                {ExtendVideoMutation.isPending ? (
+                  <DotLoader className="mr-2" />
+                ) : null}
+                {t("v-gen:dialog.submit")}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };

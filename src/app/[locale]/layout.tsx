@@ -50,7 +50,7 @@ const RootLayout = ({
           <AppQeury>
             <AppNavbar locale={locale} />
             <main className="flex grow">{children}</main>
-            <AppFooter locale={locale} />
+            <AppFooter />
           </AppQeury>
         </AppTheme>
         <AppMessage />

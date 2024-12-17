@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { useDomain } from "@/hooks/global";
+import { useDomain, useShowBrand } from "@/hooks/global";
 
 type Props = {
   type?: string;
@@ -12,7 +12,9 @@ type Props = {
 };
 
 const AppLogo = ({ type, className, width = 150, height = 42 }: Props) => {
+  const showBrand = useShowBrand();
   const domain = useDomain();
+  if (!showBrand) return null;
   return (
     <div className={className}>
       {type === "mini" ? (

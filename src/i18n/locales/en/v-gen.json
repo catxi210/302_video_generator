@@ -10,7 +10,7 @@
   "form": {
     "model": {
       "title": "Video Model",
-      "desc": "Choose Model",
+      "desc": "Select model",
       "option": {
         "luma": "Luma",
         "kling": "Kling",
@@ -18,7 +18,12 @@
         "cog": "Cog",
         "minimax": "Minimax",
         "pika": "Pika",
-        "genmo": "Mochi-V1"
+        "genmo": "Mochi-V1",
+        "haiper": "Haiper",
+        "pixverse": "PixVerse",
+        "lightricks": "Lightricks",
+        "hunyuan": "Hunyuan",
+        "vidu": "Vidu"
       }
     },
     "prompt": {
@@ -32,6 +37,22 @@
     "last_frame": {
       "title": "Last Frame",
       "desc": "Drag or click to upload an image"
+    },
+    "main_image1": {
+      "title": "Main Image 1",
+      "desc": "Please upload main image 1"
+    },
+    "main_image2": {
+      "title": "Main Image 2",
+      "desc": "Please upload main image 2"
+    },
+    "main_image3": {
+      "title": "Main Image 3",
+      "desc": "Please upload main image 3"
+    },
+    "third_frame": {
+      "title": "Video Third Frame",
+      "desc": "Drag and drop or click to upload image"
     },
     "ratio": {
       "title": "Video Ratio",
@@ -107,11 +128,121 @@
         "crumble": "Crumble",
         "dissolve": "Dissolve"
       }
+    },
+    "template": {
+      "title": "Video Effects",
+      "desc": "Select Video Effects",
+      "option": {
+        "hairCurl": "Everything can be curly",
+        "hairKing": "Hair Volume King",
+        "wonderWomanTransformation": "Wonder Woman Transformation",
+        "catwomanTransformation": "Catwoman Transformation",
+        "harleyQuinnTransformation": "Harley Quinn Transformation",
+        "muscleMan": "Become a Muscular Man",
+        "summonHulk": "Transform into the Hulk",
+        "jokerRebirth": "Transform into the Joker",
+        "ironmanTransformation": "Transform into Ironman",
+        "batmanReturns": "Transform into Batman",
+        "wickedShots": "Wicked Shots",
+        "venomTransformation": "Transform into Venom",
+        "venomColorBox": "Venom (Color Box)",
+        "hugYourLove": "Hug Your Love",
+        "zombieMode": "Zombie Mode",
+        "squishIt": "Squish It",
+        "zombieHand": "Zombie Hand",
+        "wizardHat": "Wizard Hat",
+        "leggyRun": "Leggy Run",
+        "monsterInvades": "Monster Invades",
+        "legoBlast": "Lego Blast"
+      }
+    },
+    "vidu_type": {
+      "title": "Video Type",
+      "desc": "Select video generation type",
+      "option": {
+        "general": "General",
+        "character": "Character",
+        "scene": "Scene"
+      }
+    },
+    "vidu_style": {
+      "title": "Video Style",
+      "desc": "Select video style",
+      "option": {
+        "general": "General",
+        "anime": "Anime"
+      }
+    },
+    "vidu_time": {
+      "title": "Video Duration",
+      "desc": "Select video duration",
+      "option": {
+        "short": "4s",
+        "long": "8s"
+      }
+    },
+    "vidu_resolution": {
+      "title": "Video Resolution",
+      "desc": "Select video resolution",
+      "option": {
+        "sd": "SD",
+        "hd": "HD",
+        "fhd": "Ultra HD"
+      }
+    },
+    "vidu_scene": {
+      "title": "Scene Effect",
+      "desc": "Select scene effect",
+      "option": {
+        "hug": "Hug",
+        "kiss": "Kiss",
+        "christmas_effect": "Christmas Effect",
+        "santa_gifts": "Santa Gifts",
+        "merry_christmas": "Christmas Greetings",
+        "santa_hug": "Santa Hug",
+        "inflate": "Inflate",
+        "twist": "Twist",
+        "explode": "Explode",
+        "melt": "Melt"
+      }
     }
+  },
+  "dialog": {
+    "extend_ratio": {
+      "title": "Adjust Video Ratio",
+      "description": "Adjust video ratio using AI technology",
+      "horizontal_screen": "Horizontal",
+      "vertical_screen": "Vertical"
+    },
+    "extend_style": {
+      "title": "Adjust Video Style",
+      "description": "Adjust video style using AI technology"
+    },
+    "extend_upscale": {
+      "title": "Enhance Video Resolution",
+      "description": "Enhance video resolution using AI technology (1080P)"
+    },
+    "video_content": "Video Content",
+    "video_content_placeholder": "Enter video content",
+    "video_content_style": "Video Style",
+    "video_content_style_placeholder": "Enter video style",
+    "video_ratio": "Video Ratio",
+    "video_duration": "Video Duration",
+    "video_resolution": "Video Resolution",
+    "select_duration": "Select Duration",
+    "select_resolution": "Select Resolution",
+    "duration": "Duration",
+    "seconds": "s",
+    "submit": "Submit",
+    "cancel": "Cancel"
   },
   "action": {
     "create_video": "Generate Video",
     "extend_video": "Extend Video",
+    "extend_video_time": "Extend Duration",
+    "extend_video_upscale": "Enhance Resolution",
+    "extend_video_ratio": "Extend Ratio",
+    "extend_video_style": "Extend Style",
     "recreate_video": "Regenerate",
     "edit_video": "Edit Again",
     "download_video": "Download Video",

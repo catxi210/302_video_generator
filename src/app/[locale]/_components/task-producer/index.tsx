@@ -61,7 +61,7 @@ const TaskProducer = () => {
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent>
-          <CardContent>
+          <CardContent className="max-h-[calc(100vh-24.5rem)] overflow-y-auto">
             <VideoForm disabled={videoTask.isFull} />
           </CardContent>
         </CollapsibleContent>

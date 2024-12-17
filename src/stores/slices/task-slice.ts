@@ -20,6 +20,11 @@ export interface Task {
   type: TaskType;
   payload: any; // Todo: optim
   result?: TaskResult; // Optional result property
+  extendType?: string;
+  extendPrompt?: string;
+  extendRatio?: string;
+  extendSeconds?: number;
+  structureTransformation?: number;
 }
 
 export interface TaskStore {
