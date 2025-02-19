@@ -82,7 +82,7 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
   } = useQuery({
     queryKey: ["video", taskId],
     queryFn: () => generateVideo(taskData),
-    retry: 2,
+    retry: 0,
     enabled: !taskData.result,
   });
 
