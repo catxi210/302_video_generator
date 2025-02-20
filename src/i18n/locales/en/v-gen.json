@@ -14,16 +14,23 @@
       "option": {
         "luma": "Luma",
         "kling": "Kling",
+        "kling_15": "Kling-V1.5",
+        "kling_16": "Kling-V1.6",
         "runway": "Runway",
         "cog": "Cog",
-        "minimax": "Minimax",
+        "minimax": "Minimax-Video-01",
+        "minimax_live2d": "Minimax-Live2D",
+        "minimax_s2v01": "Minimax-S2V-01",
         "pika": "Pika",
         "genmo": "Mochi-V1",
         "haiper": "Haiper",
         "pixverse": "PixVerse",
         "lightricks": "Lightricks",
         "hunyuan": "Hunyuan",
-        "vidu": "Vidu"
+        "vidu": "Vidu",
+        "wanx_turbo": "Wanx-Turbo",
+        "wanx_plus": "Wanx-Plus",
+        "seaweed": "Doubao-Seaweed"
       }
     },
     "prompt": {
@@ -37,6 +44,10 @@
     "last_frame": {
       "title": "Last Frame",
       "desc": "Drag or click to upload an image"
+    },
+    "main_image": {
+      "title": "Main Image",
+      "desc": "Please upload main image"
     },
     "main_image1": {
       "title": "Main Image 1",
@@ -53,6 +64,26 @@
     "third_frame": {
       "title": "Video Third Frame",
       "desc": "Drag and drop or click to upload image"
+    },
+    "reference_image": {
+      "title": "Reference Image",
+      "desc": "Please upload reference image"
+    },
+    "reference_image1": {
+      "title": "Reference Image 1",
+      "desc": "Please upload reference image 1"
+    },
+    "reference_image2": {
+      "title": "Reference Image 2",
+      "desc": "Please upload reference image 2"
+    },
+    "reference_image3": {
+      "title": "Reference Image 3",
+      "desc": "Please upload reference image 3"
+    },
+    "reference_image4": {
+      "title": "Reference Image 4",
+      "desc": "Please upload reference image 4"
     },
     "ratio": {
       "title": "Video Ratio",
@@ -133,19 +164,19 @@
       "title": "Video Effects",
       "desc": "Select Video Effects",
       "option": {
-        "hairCurl": "Everything can be curly",
+        "hairCurl": "Everything Can Be Curly",
         "hairKing": "Hair Volume King",
         "wonderWomanTransformation": "Wonder Woman Transformation",
         "catwomanTransformation": "Catwoman Transformation",
         "harleyQuinnTransformation": "Harley Quinn Transformation",
-        "muscleMan": "Become a Muscular Man",
-        "summonHulk": "Transform into the Hulk",
-        "jokerRebirth": "Transform into the Joker",
-        "ironmanTransformation": "Transform into Ironman",
+        "muscleMan": "Become Muscle Man",
+        "summonHulk": "Transform into Hulk",
+        "jokerRebirth": "Transform into Joker",
+        "ironmanTransformation": "Transform into Iron Man",
         "batmanReturns": "Transform into Batman",
         "wickedShots": "Wicked Shots",
         "venomTransformation": "Transform into Venom",
-        "venomColorBox": "Venom (Color Box)",
+        "venomColorBox": "Venom (Color Box Version)",
         "hugYourLove": "Hug Your Love",
         "zombieMode": "Zombie Mode",
         "squishIt": "Squish It",
@@ -153,7 +184,21 @@
         "wizardHat": "Wizard Hat",
         "leggyRun": "Leggy Run",
         "monsterInvades": "Monster Invades",
-        "legoBlast": "Lego Blast"
+        "legoBlast": "Lego Blast",
+        "sailorMoonTransformation": "Sailor Moon Transformation",
+        "blackGokuEngine": "Black Goku Engine",
+        "aliveArt": "Art Comes Alive",
+        "babyFace": "Baby Face",
+        "cigarBoss": "Cigar Boss",
+        "fightAndMeet": "Fight to Meet",
+        "kissOfLove": "Kiss of Love",
+        "christmasOutfit": "Christmas Outfit",
+        "christmasGiftBox": "Christmas Gift Box",
+        "santaHideAndSeek": "Where is Santa",
+        "venomReveal": "Who is Venom",
+        "venomBrother": "Summon Venom Brother",
+        "squidGame": "Squid Game",
+        "ingiGaze": "Ingi's Gaze"
       }
     },
     "vidu_type": {
@@ -196,14 +241,45 @@
       "option": {
         "hug": "Hug",
         "kiss": "Kiss",
-        "christmas_effect": "Christmas Effect",
-        "santa_gifts": "Santa Gifts",
-        "merry_christmas": "Christmas Greetings",
-        "santa_hug": "Santa Hug",
+        "christmas_effect": "Transform into Santa",
+        "santa_gifts": "Santa Delivering Gifts",
+        "merry_christmas": "Santa's Christmas Toast",
+        "santa_hug": "Santa's Hug",
         "inflate": "Inflate",
         "twist": "Twist",
         "explode": "Explode",
-        "melt": "Melt"
+        "melt": "Melt",
+        "live_photo@smile": "Smile",
+        "live_photo@wind": "Wind Effect",
+        "live_photo@camera": "Camera Motion",
+        "live_photo@walk": "Walking",
+        "emotionlab@terrible": "Fear",
+        "emotionlab@smile": "Smile",
+        "emotionlab@laugh": "Laugh Out Loud",
+        "emotionlab@surprised": "Surprised",
+        "live_memory@old_photo": "Animate Old Photo",
+        "hair_swap@curl": "Curly Hair",
+        "hair_swap@double": "Twin Tails",
+        "hair_swap@long": "Long Hair",
+        "interaction@love": "Love Interaction",
+        "interaction@rose": "Give Rose",
+        "lunar_newyear@fireworks": "New Year Fireworks",
+        "lunar_newyear@cheers": "New Year Toast",
+        "lunar_newyear@gift": "New Year Red Packet",
+        "youth_rewind@rewind": "Childhood Memories",
+        "dynasty_dress@dress": "Traditional Costume Change",
+        "lover_pose@pose": "Family Heart Pose",
+        "wish_sender@love": "Heart with God of Wealth",
+        "wish_sender@coins": "God of Wealth Coins",
+        "dreamy_wedding": "Dreamy Wedding",
+        "romantic_lift": "Romantic Princess Hug",
+        "sweet_proposal": "Sweet Proposal",
+        "couple_arrival@flower": "Couple Give Flowers",
+        "couple_arrival@hug": "Couple Hug",
+        "couple_arrival@kiss": "Couple Kiss",
+        "couple_arrival@wave": "Couple Wave",
+        "cupid_arrow": "Cupid's Arrow",
+        "pet_lovers": "Pet Lovers"
       }
     }
   },
@@ -220,12 +296,18 @@
     },
     "extend_upscale": {
       "title": "Enhance Video Resolution",
-      "description": "Enhance video resolution using AI technology (1080P)"
+      "description": "Enhance video resolution and quality using AI technology"
+    },
+    "extend_audio": {
+      "title": "Add Video Voice",
+      "description": "Add voice to video using AI technology"
     },
     "video_content": "Video Content",
     "video_content_placeholder": "Enter video content",
     "video_content_style": "Video Style",
     "video_content_style_placeholder": "Enter video style",
+    "audio_content": "Voice Content",
+    "audio_content_placeholder": "Enter voice content",
     "video_ratio": "Video Ratio",
     "video_duration": "Video Duration",
     "video_resolution": "Video Resolution",
@@ -243,6 +325,7 @@
     "extend_video_upscale": "Enhance Resolution",
     "extend_video_ratio": "Extend Ratio",
     "extend_video_style": "Extend Style",
+    "extend_video_audio": "Add Voice",
     "recreate_video": "Regenerate",
     "edit_video": "Edit Again",
     "download_video": "Download Video",
@@ -250,11 +333,12 @@
     "delete_video": "Delete Video"
   },
   "info": {
-    "video_on_create": "Video being generated",
-    "video_on_extend": "Video extending"
+    "video_on_create": "Video is being generated",
+    "video_on_extend": "Video is being extended",
+    "video_on_audio": "Video is being dubbed"
   },
   "example": {
-    "prompt": "In the morning mist, sunlight filters through treetops, casting dappled shadows, draping the earth in a golden veil. In the distance, green mountains stretch layer upon layer to the horizon, merging with the azure sky. Nearby, a stream flows gently, crystal clear, with wildflowers blooming along the banks—red, yellow, purple, like the earth’s palette. As a breeze passes, the fragrance of flowers and earth mingles, fresh and pleasing. At this moment, the world is so tranquil, it’s as if time has stood still, making one feel peaceful and content.",
+    "prompt": "In the morning mist, sunlight filters through treetops, casting dappled shadows, draping the earth in a golden veil. In the distance, green mountains stretch layer upon layer to the horizon, merging with the azure sky. Nearby, a stream flows gently, crystal clear, with wildflowers blooming along the banks—red, yellow, purple, like the earth's palette. As a breeze passes, the fragrance of flowers and earth mingles, fresh and pleasing. At this moment, the world is so tranquil, it's as if time has stood still, making one feel peaceful and content.",
     "try": "Try it"
   }
 }

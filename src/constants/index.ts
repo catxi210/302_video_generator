@@ -16,7 +16,9 @@ import {
   OptionProps,
   PIKA_RATIO_OPTION,
   RUNWAY_RATIO_OPTION,
+  SEAWEED_RATIO_OPTION,
   VIDU_RATIO_OPTION,
+  WANX_RATION_OPTION,
 } from "./options";
 
 // APP
@@ -54,6 +56,8 @@ type OptionConstansProps = {
   pixverseVideoOption: OptionProps[];
   lightricksVideoOption: OptionProps[];
   viduVideoOption: OptionProps[];
+  wanxVideoOption: OptionProps[];
+  seaweedVideoOption: OptionProps[];
 };
 
 export const OPTION_CONSTANTS: OptionConstansProps = {
@@ -68,4 +72,6 @@ export const OPTION_CONSTANTS: OptionConstansProps = {
   pixverseVideoOption: CUSTOMER_RATIO_OPTION,
   lightricksVideoOption: LIGHTRICKS_RATIO_OPTION,
   viduVideoOption: VIDU_RATIO_OPTION,
+  wanxVideoOption: WANX_RATION_OPTION,
+  seaweedVideoOption: SEAWEED_RATIO_OPTION,
 };

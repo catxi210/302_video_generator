@@ -14,16 +14,23 @@
       "option": {
         "luma": "Luma",
         "kling": "Kling",
+        "kling_15": "Kling-V1.5",
+        "kling_16": "Kling-V1.6",
         "runway": "Runway",
         "cog": "智谱",
-        "minimax": "Minimax",
+        "minimax": "Minimax-Video-01",
+        "minimax_live2d": "Minimax-Live2D",
+        "minimax_s2v01": "Minimax-S2V-01",
         "pika": "Pika",
         "genmo": "Mochi-V1",
         "haiper": "Haiper",
         "pixverse": "PixVerse",
         "lightricks": "Lightricks",
         "hunyuan": "Hunyuan",
-        "vidu": "Vidu"
+        "vidu": "Vidu",
+        "wanx_turbo": "Wanx-Turbo",
+        "wanx_plus": "Wanx-Plus",
+        "seaweed": "Doubao-Seaweed"
       }
     },
     "prompt": {
@@ -42,6 +49,10 @@
       "title": "ビデオ第三フレーム",
       "desc": "ドラッグまたはクリックして画像をアップロード"
     },
+    "main_image": {
+      "title": "メイン画像",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
     "main_image1": {
       "title": "メイン画像1",
       "desc": "ドラッグまたはクリックして画像をアップロード"
@@ -52,6 +63,26 @@
     },
     "main_image3": {
       "title": "メイン画像3",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "reference_image": {
+      "title": "参考画像",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "reference_image1": {
+      "title": "参考画像1",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "reference_image2": {
+      "title": "参考画像2",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "reference_image3": {
+      "title": "参考画像3",
+      "desc": "ドラッグまたはクリックして画像をアップロード"
+    },
+    "reference_image4": {
+      "title": "参考画像4",
       "desc": "ドラッグまたはクリックして画像をアップロード"
     },
     "ratio": {
@@ -133,27 +164,41 @@
       "title": "ビデオエフェクト",
       "desc": "ビデオエフェクトを選択",
       "option": {
-        "hairCurl": "万物皆可羊毛卷",
-        "hairKing": "発量王者",
+        "hairCurl": "万物カール可能",
+        "hairKing": "ヘアボリュームキング",
         "wonderWomanTransformation": "ワンダーウーマン変身",
         "catwomanTransformation": "キャットウーマン変身",
-        "harleyQuinnTransformation": "ハーレイクイン変身",
-        "muscleMan": "筋肉マンになる",
+        "harleyQuinnTransformation": "ハーレイ・クイン変身",
+        "muscleMan": "マッチョマンに変身",
         "summonHulk": "ハルクに変身",
         "jokerRebirth": "ジョーカーに変身",
         "ironmanTransformation": "アイアンマンに変身",
         "batmanReturns": "バットマンに変身",
-        "wickedShots": "Wicked Shots",
+        "wickedShots": "イタズラショット",
         "venomTransformation": "ヴェノムに変身",
-        "venomColorBox": "ヴェノム（ブラインドボックス版）",
-        "hugYourLove": "愛の抱擁",
+        "venomColorBox": "ヴェノム（カラーボックス版）",
+        "hugYourLove": "愛のハグ",
         "zombieMode": "ゾンビモード",
-        "squishIt": "Squish It",
+        "squishIt": "押しつぶす",
         "zombieHand": "ゾンビハンド",
-        "wizardHat": "ウィザードハット",
-        "leggyRun": "レギーラン",
+        "wizardHat": "魔法使いの帽子",
+        "leggyRun": "長脚ラン",
         "monsterInvades": "モンスター侵入",
-        "legoBlast": "レゴブラスト"
+        "legoBlast": "レゴブラスト",
+        "sailorMoonTransformation": "セーラームーン変身",
+        "blackGokuEngine": "ブラック悟空エンジン",
+        "aliveArt": "アート・カムズ・アライブ",
+        "babyFace": "ベビーフェイス",
+        "cigarBoss": "シガーボス",
+        "fightAndMeet": "戦いの出会い",
+        "kissOfLove": "愛のキス",
+        "christmasOutfit": "クリスマスコスチューム",
+        "christmasGiftBox": "クリスマスギフトボックス",
+        "santaHideAndSeek": "サンタを探せ",
+        "venomReveal": "ヴェノムは誰だ",
+        "venomBrother": "ヴェノムブラザー召喚",
+        "squidGame": "イカゲーム",
+        "ingiGaze": "インギの凝視"
       }
     },
     "vidu_type": {
@@ -196,14 +241,45 @@
       "option": {
         "hug": "ハグ",
         "kiss": "キス",
-        "christmas_effect": "クリスマス効果",
-        "santa_gifts": "サンタのプレゼント",
-        "merry_christmas": "クリスマスの挨拶",
+        "christmas_effect": "サンタに変身",
+        "santa_gifts": "サンタのプレゼント配り",
+        "merry_christmas": "サンタの乾杯",
         "santa_hug": "サンタのハグ",
         "inflate": "膨張",
         "twist": "ねじれ",
         "explode": "爆発",
-        "melt": "溶解"
+        "melt": "溶解",
+        "live_photo@smile": "スマイル",
+        "live_photo@wind": "風エフェクト",
+        "live_photo@camera": "カメラモーション",
+        "live_photo@walk": "歩行",
+        "emotionlab@terrible": "恐怖",
+        "emotionlab@smile": "スマイル",
+        "emotionlab@laugh": "大笑い",
+        "emotionlab@surprised": "驚き",
+        "live_memory@old_photo": "古い写真をアニメーション化",
+        "hair_swap@curl": "カール",
+        "hair_swap@double": "ツインテール",
+        "hair_swap@long": "ロングヘア",
+        "interaction@love": "愛の交流",
+        "interaction@rose": "バラを贈る",
+        "lunar_newyear@fireworks": "新年の花火",
+        "lunar_newyear@cheers": "新年の乾杯",
+        "lunar_newyear@gift": "新年の紅包",
+        "youth_rewind@rewind": "子供時代の思い出",
+        "dynasty_dress@dress": "伝統衣装チェンジ",
+        "lover_pose@pose": "家族のハートポーズ",
+        "wish_sender@love": "財神とハートポーズ",
+        "wish_sender@coins": "財神の金貨",
+        "dreamy_wedding": "ドリームウェディング",
+        "romantic_lift": "ロマンティックなプリンセスハグ",
+        "sweet_proposal": "甘いプロポーズ",
+        "couple_arrival@flower": "カップルが花を贈る",
+        "couple_arrival@hug": "カップルが抱き合う",
+        "couple_arrival@kiss": "カップルがキスする",
+        "couple_arrival@wave": "カップルが手を振る",
+        "cupid_arrow": "カプディウスの矢",
+        "pet_lovers": "ペットラブラー"
       }
     }
   },
@@ -214,6 +290,7 @@
     "extend_video_upscale": "解像度向上",
     "extend_video_ratio": "比率を延長",
     "extend_video_style": "スタイルを延長",
+    "extend_video_audio": "音声を追加",
     "recreate_video": "再生成",
     "edit_video": "再編集",
     "download_video": "ビデオをダウンロード",
@@ -222,7 +299,8 @@
   },
   "info": {
     "video_on_create": "ビデオ生成中",
-    "video_on_extend": "ビデオ拡張中"
+    "video_on_extend": "ビデオ拡張中",
+    "video_on_audio": "ビデオ吹き替え中"
   },
   "example": {
     "prompt": "朝の薄霧の中で、陽光が木々の間を通り抜け、まだらな光と影を大地にまぶしていた。遠くには、青翠の山々が重なり合って空と一体化している。近くでは、小川が澄んだ水を流し、岸辺には色とりどりの野花が咲き競っている。それらは大地のパレットのようだ。そよ風が吹き、花の香りと土の香りが混じり合って心地よい。この瞬間、天地はこんなにも静まり返り、時が止まったかのように心が落ち着くようだ",
@@ -243,10 +321,16 @@
       "title": "動画解像度の向上",
       "description": "AI技術を使用して動画の解像度と品質を向上"
     },
+    "extend_audio": {
+      "title": "動画音声の追加",
+      "description": "AI技術を使用して動画に音声を追加"
+    },
     "video_content": "動画内容",
     "video_content_placeholder": "動画内容を入力",
     "video_content_style": "動画スタイル",
     "video_content_style_placeholder": "動画スタイルを入力",
+    "audio_content": "音声内容",
+    "audio_content_placeholder": "音声内容を入力",
     "video_ratio": "動画比率",
     "video_duration": "動画時間",
     "video_resolution": "動画解像度",

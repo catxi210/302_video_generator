@@ -27,6 +27,10 @@ type DefaultVideoData = {
   lastFrame: null | File;
   thirdFile: null | File;
   thirdFrame: null | File;
+  referenceImage1: null | File;
+  referenceImage2: null | File;
+  referenceImage3: null | File;
+  referenceImage4: null | File;
   ratio?: string;
   type?: string;
   time?: string;
@@ -98,33 +102,57 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
           "loop",
         ]);
         break;
+      case "kling_15":
+        setRatioOptions(OPTION_CONSTANTS.klingVideoOption);
+        const baseFields = [
+          "model",
+          "prompt",
+          "firstFile",
+          "firstFrame",
+          "ratio",
+          "type",
+          "time",
+        ];
+        const referenceFields = [
+          "referenceImage1",
+          "referenceImage2",
+          "referenceImage3",
+          "referenceImage4",
+        ];
+        const lastFields = ["lastFile", "lastFrame"];
+
+        if (typeValue === "fast") {
+          setShowFields(
+            firstFile ? baseFields : [...baseFields, ...referenceFields]
+          );
+        } else {
+          setShowFields(
+            firstFile
+              ? [...baseFields, ...lastFields]
+              : [...baseFields, ...lastFields, ...referenceFields]
+          );
+        }
+        break;
       case "kling":
         setRatioOptions(OPTION_CONSTANTS.klingVideoOption);
-        if (typeValue === "fast" || firstFile || lastFile) {
-          setValue("time", "5s");
-          setShowFields([
-            "model",
-            "prompt",
-            "firstFile",
-            "firstFrame",
-            "lastFile",
-            "lastFrame",
-            "ratio",
-            "type",
-          ]);
-        } else {
-          setShowFields([
-            "model",
-            "prompt",
-            "firstFile",
-            "firstFrame",
-            "lastFile",
-            "lastFrame",
-            "ratio",
-            "type",
-            "time",
-          ]);
+        const fields = [
+          "model",
+          "prompt",
+          "firstFile",
+          "firstFrame",
+          "ratio",
+          "type",
+          "time",
+        ];
+        if (!firstFile) {
+          fields.push(
+            "referenceImage1",
+            "referenceImage2",
+            "referenceImage3",
+            "referenceImage4"
+          );
         }
+        setShowFields(fields);
         break;
       case "runway":
         setRatioOptions(OPTION_CONSTANTS.runwayVideoOption);
@@ -153,9 +181,39 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         break;
       case "cog":
         setRatioOptions(OPTION_CONSTANTS.cogVideoOption);
-        setShowFields(["model", "prompt", "firstFile", "firstFrame"]);
+        // setShowFields(["model", "prompt", "firstFile", "firstFrame"]);
+        if (firstFile) {
+          setShowFields([
+            "model",
+            "prompt",
+            "firstFile",
+            "firstFrame",
+            "type",
+            "audio",
+            "time",
+            "ratio",
+          ]);
+        } else {
+          setShowFields([
+            "model",
+            "prompt",
+            "firstFile",
+            "firstFrame",
+            "type",
+            "audio",
+            "ratio",
+          ]);
+        }
         break;
       case "minimax":
+        setRatioOptions(OPTION_CONSTANTS.minimaxVideoOption);
+        setShowFields(["model", "prompt", "firstFile", "firstFrame"]);
+        break;
+      case "minimax_live2d":
+        setRatioOptions(OPTION_CONSTANTS.minimaxVideoOption);
+        setShowFields(["model", "prompt", "firstFile", "firstFrame"]);
+        break;
+      case "minimax_s2v01":
         setRatioOptions(OPTION_CONSTANTS.minimaxVideoOption);
         setShowFields(["model", "prompt", "firstFile", "firstFrame"]);
         break;
@@ -167,8 +225,8 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
           "firstFile",
           "firstFrame",
           "ratio",
-          "style",
-          "audio",
+          // "style",
+          // "audio",
         ]);
         break;
       case "genmo":
@@ -195,6 +253,14 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
       case "hunyuan":
         setShowFields(["model", "prompt"]);
         break;
+      case "wanx_turbo":
+        setRatioOptions(OPTION_CONSTANTS.wanxVideoOption);
+        setShowFields(["model", "prompt", "ratio"]);
+        break;
+      case "wanx_plus":
+        setRatioOptions(OPTION_CONSTANTS.wanxVideoOption);
+        setShowFields(["model", "prompt", "ratio"]);
+        break;
       case "vidu":
         setRatioOptions(OPTION_CONSTANTS.viduVideoOption);
         const viduShowFields = [
@@ -211,7 +277,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         if (viduTypeValue === "scene") {
           viduShowFields.push("viduScene");
         } else if (viduTypeValue === "character") {
-          viduShowFields.push("viduTime");
+          // viduShowFields.push("viduTime");
           viduShowFields.push("viduResolution");
           viduShowFields.push("thirdFile");
           viduShowFields.push("thirdFrame");
@@ -230,6 +296,10 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
           }
         }
         setShowFields(viduShowFields);
+        break;
+      case "seaweed":
+        setRatioOptions(OPTION_CONSTANTS.seaweedVideoOption);
+        setShowFields(["model", "prompt", "firstFile", "firstFrame", "ratio"]);
         break;
       default:
         setRatioOptions(OPTION_CONSTANTS.defaultVideoOption);
@@ -273,7 +343,15 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
   // Set Ratio
   useEffect(() => {
     if (
-      ["kling", "pika", "vidu"].includes(modelValue) ||
+      [
+        "kling_15",
+        "kling",
+        "pika",
+        "vidu",
+        "wanx_turbo",
+        "wanx_plus",
+        "seaweed",
+      ].includes(modelValue) ||
       (showFields.includes("firstFile") && firstFile) ||
       (showFields.includes("lastFile") && lastFile) ||
       (showFields.includes("thirdFile") && thirdFile)
@@ -291,7 +369,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   // Set Ready
   useEffect(() => {
-    if (["pixverse"].includes(modelValue)) {
+    if (["pixverse", "minimax_live2d", "minimax_s2v01"].includes(modelValue)) {
       setIsReady(!!firstFile);
     } else {
       setIsReady(!!(firstFile || lastFile || promptValue));
@@ -328,6 +406,15 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   // 添加一个函数来获取正确的标签
   const getFieldLabel = (fieldName: string) => {
+    // 在minimax_s2v01模型时才改变标签
+    if (modelValue === "minimax_s2v01") {
+      if (fieldName === "firstFile" || fieldName === "firstFrame") {
+        return {
+          label: "v-gen:form.main_image.title",
+          placeholder: "v-gen:form.main_image.desc",
+        };
+      }
+    }
     // 只有在vidu模型且viduType为character时才改变标签
     if (modelValue === "vidu" && viduTypeValue !== "general") {
       if (fieldName === "firstFile" || fieldName === "firstFrame") {

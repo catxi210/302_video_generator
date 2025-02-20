@@ -13,6 +13,7 @@ import {
   RotateCcwIcon,
   Trash2Icon,
   UnfoldHorizontal,
+  Volume2,
   Wand2,
 } from "lucide-react";
 
@@ -108,7 +109,9 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
   // const [selectedResolution, setSelectedResolution] = useState("720p");
 
   // Handler Extend Video
-  const handleExtendVideo = (type: "ratio" | "style" | "time" | "upscale") => {
+  const handleExtendVideo = (
+    type: "ratio" | "style" | "time" | "upscale" | "audio"
+  ) => {
     setExtensionType(type);
     if (type === "time") {
       ExtendVideoMutation.mutate({ ...taskData, extendType: type });
@@ -186,6 +189,29 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
               </span>
             </div>
             <div className="flex w-full justify-end gap-2 md:justify-end">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className="hover:border-purple-500 hover:text-purple-500"
+                      size={"sm"}
+                      onClick={() => handleExtendVideo("audio")}
+                      disabled={
+                        isFetching ||
+                        ExtendVideoMutation.isPending ||
+                        !taskData.result?.videoUrl
+                      }
+                    >
+                      <Volume2 size={16} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{t("v-gen:action.extend_video_audio")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               {["vidu"].includes(taskData.payload.model) && (
                 <TooltipProvider>
                   <Tooltip>
@@ -207,6 +233,31 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>{t("v-gen:action.extend_video_upscale")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+
+              {["kling", "luma"].includes(taskData.payload.model) && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className="hover:border-purple-500 hover:text-purple-500"
+                        size={"sm"}
+                        onClick={() => handleExtendVideo("time")}
+                        disabled={
+                          isFetching ||
+                          ExtendVideoMutation.isPending ||
+                          !taskData.result?.resultId
+                        }
+                      >
+                        <UnfoldHorizontal size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{t("v-gen:action.extend_video_time")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -257,31 +308,6 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-
-              {["kling", "luma"].includes(taskData.payload.model) && (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className="hover:border-purple-500 hover:text-purple-500"
-                        size={"sm"}
-                        onClick={() => handleExtendVideo("time")}
-                        disabled={
-                          isFetching ||
-                          ExtendVideoMutation.isPending ||
-                          !taskData.result?.resultId
-                        }
-                      >
-                        <UnfoldHorizontal size={16} />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t("v-gen:action.extend_video_time")}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
 
               <TooltipProvider>
                 <Tooltip>
@@ -371,7 +397,9 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
               <p className="p-2 text-center text-xs text-primary">
                 {isFetching
                   ? t("v-gen:info.video_on_create")
-                  : t("v-gen:info.video_on_extend")}
+                  : ExtendVideoMutation.variables?.extendType === "audio"
+                    ? t("v-gen:info.video_on_audio")
+                    : t("v-gen:info.video_on_extend")}
               </p>
             </div>
           )}
@@ -411,14 +439,18 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                 ? t("v-gen:dialog.extend_ratio.title")
                 : extensionType === "style"
                   ? t("v-gen:dialog.extend_style.title")
-                  : t("v-gen:dialog.extend_upscale.title")}
+                  : extensionType === "audio"
+                    ? t("v-gen:dialog.extend_audio.title")
+                    : t("v-gen:dialog.extend_upscale.title")}
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               {extensionType === "ratio"
                 ? t("v-gen:dialog.extend_ratio.description")
                 : extensionType === "style"
                   ? t("v-gen:dialog.extend_style.description")
-                  : t("v-gen:dialog.extend_upscale.description")}
+                  : extensionType === "audio"
+                    ? t("v-gen:dialog.extend_audio.description")
+                    : t("v-gen:dialog.extend_upscale.description")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-6">
@@ -427,7 +459,9 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                 <label className="text-sm font-medium text-gray-700">
                   {extensionType === "ratio"
                     ? t("v-gen:dialog.video_content")
-                    : t("v-gen:dialog.video_content_style")}
+                    : extensionType === "audio"
+                      ? t("v-gen:dialog.audio_content")
+                      : t("v-gen:dialog.video_content_style")}
                 </label>
                 <input
                   type="text"
@@ -437,7 +471,9 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
                   placeholder={
                     extensionType === "ratio"
                       ? t("v-gen:dialog.video_content_placeholder")
-                      : t("v-gen:dialog.video_content_style_placeholder")
+                      : extensionType === "audio"
+                        ? t("v-gen:dialog.audio_content_placeholder")
+                        : t("v-gen:dialog.video_content_style_placeholder")
                   }
                 />
               </div>

@@ -11,6 +11,10 @@ export type VideoFormKey =
   | "lastFrame"
   | "thirdFile"
   | "thirdFrame"
+  | "referenceImage1"
+  | "referenceImage2"
+  | "referenceImage3"
+  | "referenceImage4"
   | "ratio"
   | "type"
   | "time"
@@ -34,6 +38,10 @@ export const VideoSchema = z.object({
   lastFrame: z.union([FileSchema, z.null()]).optional(),
   thirdFile: z.union([FileSchema, z.null()]).optional(),
   thirdFrame: z.union([FileSchema, z.null()]).optional(),
+  referenceImage1: z.union([FileSchema, z.null()]).optional(),
+  referenceImage2: z.union([FileSchema, z.null()]).optional(),
+  referenceImage3: z.union([FileSchema, z.null()]).optional(),
+  referenceImage4: z.union([FileSchema, z.null()]).optional(),
   ratio: z.string().optional(),
   type: z.string().optional(),
   time: z.string().optional(),

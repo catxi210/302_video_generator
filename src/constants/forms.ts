@@ -186,4 +186,32 @@ export const VIDEO_FORM: VideoFormProps[] = [
     type: "select",
     selectOptions: VIDU_SCENE_OPTION,
   },
+  {
+    id: 18,
+    name: "referenceImage1",
+    label: "v-gen:form.reference_image1.title",
+    placeholder: "v-gen:form.reference_image1.desc",
+    type: "upload",
+  },
+  {
+    id: 19,
+    name: "referenceImage2",
+    label: "v-gen:form.reference_image2.title",
+    placeholder: "v-gen:form.reference_image2.desc",
+    type: "upload",
+  },
+  {
+    id: 20,
+    name: "referenceImage3",
+    label: "v-gen:form.reference_image3.title",
+    placeholder: "v-gen:form.reference_image3.desc",
+    type: "upload",
+  },
+  {
+    id: 21,
+    name: "referenceImage4",
+    label: "v-gen:form.reference_image4.title",
+    placeholder: "v-gen:form.reference_image4.desc",
+    type: "upload",
+  },
 ];
