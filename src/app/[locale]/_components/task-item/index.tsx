@@ -167,8 +167,7 @@ const TaskItem = ({ top, taskData }: TaskItemProps) => {
     const frameImageFiel =
       taskData.payload.firstFrame || taskData.payload.lastFrame;
     if (frameImageFiel) {
-      const imageURL = URL.createObjectURL(frameImageFiel);
-      setFrameImageURL(imageURL);
+      setFrameImageURL(frameImageFiel);
     }
   }, [taskData.payload]);
 

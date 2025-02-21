@@ -39,5 +39,8 @@
     "code_invalid": "分享码错误, 更多请访问 302.AI",
     "tool_disabled": "该工具已禁用, 更多请访问 302.AI",
     "tool_deleted": "该工具已删除, 更多请访问 302.AI"
+  },
+  "status": {
+    "uploading": "上传中..."
   }
 }

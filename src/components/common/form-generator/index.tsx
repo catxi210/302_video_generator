@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Image from "next/image";
 import React, { useCallback, useState } from "react";
 
 import { ErrorMessage } from "@hookform/error-message";
-import { CircleX, UploadIcon } from "lucide-react";
+import { CircleX, Loader2, UploadIcon } from "lucide-react";
 import {
   FieldErrors,
   FieldValues,
@@ -25,6 +24,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useClientTranslation } from "@/hooks/global";
 import { cn } from "@/lib/utils";
+import { uploadImage } from "@/services/global";
 
 import TransRenderer from "../trans-renderer";
 
@@ -61,18 +61,21 @@ const FormGenerator = ({
 }: FormGeneratorProps) => {
   const { t } = useClientTranslation();
   const [dragEnter, setDragEnter] = useState(false);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileDrop = useCallback(
-    (files: FileList) => {
+    async (files: FileList) => {
       const file = files[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setPreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-        setValue(name, file);
+        try {
+          setIsUploading(true);
+          const url = await uploadImage(file);
+          setValue(name, url);
+        } catch (error) {
+          console.error("Upload failed:", error);
+        } finally {
+          setIsUploading(false);
+        }
       }
     },
     [name, setValue]
@@ -97,7 +100,6 @@ const FormGenerator = ({
 
   const clearFile = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setPreview(null);
     setValue(name, null);
   };
 
@@ -190,24 +192,19 @@ const FormGenerator = ({
   };
 
   const renderUpload = () => {
-    const currentValue = watch(name, getValues(name));
-    let localUrl = "";
-    if (currentValue) {
-      localUrl = URL.createObjectURL(currentValue) as string;
-    }
-    const imageURL = localUrl || preview;
+    const imageURL = watch(name, getValues(name));
     return (
       <Label htmlFor={`upload-${name}`} className={className}>
         <p>{label && t(label)}</p>
         {imageURL ? (
           <div className="relative w-full rounded-md bg-background p-2">
-            <Image
+            <img
               width={100}
               height={100}
               src={imageURL}
               alt="first image"
               style={{ width: "100%", height: "auto" }}
-            ></Image>
+            />
             <div
               className="absolute right-0 top-0 hover:scale-110"
               onClick={clearFile}
@@ -218,10 +215,11 @@ const FormGenerator = ({
         ) : (
           <div
             className={cn(
-              "rounded-lg border-2 border-dashed p-2 text-slate-500 hover:border-primary hover:text-primary",
+              "relative rounded-lg border-2 border-dashed p-2 text-slate-500 hover:border-primary hover:text-primary",
               {
                 "border-gray-400": !dragEnter,
                 "border-primary text-primary": dragEnter,
+                "pointer-events-none opacity-50": isUploading,
               }
             )}
             onDragOver={handleDragOver}
@@ -237,15 +235,21 @@ const FormGenerator = ({
                   e.target.files && handleFileDrop(e.target.files)
                 }
                 className="hidden"
+                disabled={isUploading}
               />
-              <UploadIcon />
+              {isUploading ? (
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              ) : (
+                <UploadIcon />
+              )}
               <p className="mt-2 text-center">
-                {placeholder && t(placeholder)}
+                {isUploading
+                  ? t("global:status.uploading")
+                  : placeholder && t(placeholder)}
               </p>
             </div>
           </div>
         )}
-
         {renderErrorMessage()}
       </Label>
     );

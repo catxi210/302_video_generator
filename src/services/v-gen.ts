@@ -5,7 +5,7 @@ import { isEnglish } from "@/lib/utils";
 import { useTaskStore } from "@/stores";
 import { Task, TaskResult } from "@/stores/slices/task-slice";
 
-import { aiImageToText, aiTranslate, uploadImage } from "./global";
+import { aiImageToText, aiTranslate } from "./global";
 
 // Generate Video Fetch
 export const generateVideo = async (task: Task): Promise<TaskResult> => {
@@ -16,11 +16,11 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
       prompt = "",
       firstFrame = "",
       lastFrame = "",
+      thirdFrame = "",
       referenceImage1 = "",
       referenceImage2 = "",
       referenceImage3 = "",
       referenceImage4 = "",
-      thirdFile = "",
       ratio = "",
       type = "",
       time = "",
@@ -38,14 +38,17 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
 
     // init reference image list
     const imageList: string[] = [];
+    if (referenceImage1) imageList.push(referenceImage1);
+    if (referenceImage2) imageList.push(referenceImage2);
+    if (referenceImage3) imageList.push(referenceImage3);
+    if (referenceImage4) imageList.push(referenceImage4);
 
     // Translate prompt if not in English
     const translatedPrompt = async () =>
       prompt && !isEnglish(prompt) ? await aiTranslate(prompt) : prompt;
 
     // Extract image description by uploading and processing the frame
-    const getUploadedImagePrompt = async (frame: File) => {
-      const url = await uploadImage(frame);
+    const getUploadedImagePrompt = async (url: string) => {
       return await aiImageToText(url);
     };
 
@@ -72,25 +75,11 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
           );
 
         case "kling_15":
-          if (imageList) {
-            if (referenceImage1) {
-              imageList.push(await uploadImage(referenceImage1));
-            }
-            if (referenceImage2) {
-              imageList.push(await uploadImage(referenceImage2));
-            }
-            if (referenceImage3) {
-              imageList.push(await uploadImage(referenceImage3));
-            }
-            if (referenceImage4) {
-              imageList.push(await uploadImage(referenceImage4));
-            }
-          }
           return await getKlingVideo(
             taskId,
             videoPrompt,
-            await uploadImage(firstFrame),
-            await uploadImage(lastFrame),
+            firstFrame,
+            lastFrame,
             ratio,
             type,
             time,
@@ -99,25 +88,11 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
           );
 
         case "kling":
-          if (imageList) {
-            if (referenceImage1) {
-              imageList.push(await uploadImage(referenceImage1));
-            }
-            if (referenceImage2) {
-              imageList.push(await uploadImage(referenceImage2));
-            }
-            if (referenceImage3) {
-              imageList.push(await uploadImage(referenceImage3));
-            }
-            if (referenceImage4) {
-              imageList.push(await uploadImage(referenceImage4));
-            }
-          }
           return await getKlingVideo(
             taskId,
             videoPrompt,
-            await uploadImage(firstFrame),
-            await uploadImage(lastFrame),
+            firstFrame,
+            lastFrame,
             ratio,
             type,
             time,
@@ -139,7 +114,7 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
           return await getCogVideo(
             taskId,
             videoPrompt,
-            await uploadImage(firstFrame),
+            firstFrame,
             type,
             audio,
             time,
@@ -150,24 +125,24 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
           return await getMinimaxVideo(
             taskId,
             "video-01",
-            prompt.slice(0, 200),
-            await uploadImage(firstFrame)
+            videoPrompt.slice(0, 200),
+            firstFrame
           );
 
         case "minimax_live2d":
           return await getMinimaxVideo(
             taskId,
             "video-01-live2d",
-            prompt.slice(0, 200),
-            await uploadImage(firstFrame)
+            videoPrompt.slice(0, 200),
+            firstFrame
           );
 
         case "minimax_s2v01":
           return await getMinimaxVideo(
             taskId,
             "S2V-01",
-            prompt.slice(0, 200),
-            await uploadImage(firstFrame)
+            videoPrompt.slice(0, 200),
+            firstFrame
           );
 
         case "pika":
@@ -175,36 +150,26 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
           return await getPikaVideo(
             taskId,
             videoPrompt,
-            await uploadImage(firstFrame),
+            firstFrame,
             ratioValue
-            // style !== "none" ? style : "",
-            // audio === "true"
           );
 
         case "genmo":
           return await getGenmoVideo(taskId, await translatedPrompt());
 
         case "haiper":
-          return await getHaiperVideo(
-            taskId,
-            videoPrompt,
-            await uploadImage(firstFrame)
-          );
+          return await getHaiperVideo(taskId, videoPrompt, firstFrame);
 
         case "pixverse":
           return await getPixverseVideo(
             taskId,
             videoPrompt,
-            await uploadImage(firstFrame),
+            firstFrame,
             template
           );
 
         case "lightricks":
-          return await getLightricksVideo(
-            taskId,
-            videoPrompt,
-            await uploadImage(firstFrame)
-          );
+          return await getLightricksVideo(taskId, videoPrompt, firstFrame);
 
         case "hunyuan":
           return await getHunyuanVideo(taskId, videoPrompt);
@@ -265,10 +230,10 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
             taskId,
             prompt,
             videoPrompt,
-            await uploadImage(mergeFrame || firstFrame),
-            await uploadImage(firstFrame),
-            await uploadImage(lastFrame),
-            await uploadImage(thirdFile),
+            mergeFrame || firstFrame,
+            firstFrame,
+            lastFrame,
+            thirdFrame,
             ratio,
             viduType,
             viduStyle,
@@ -277,12 +242,7 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
             viduScene
           );
         case "seaweed":
-          return await getSeaweedVideo(
-            taskId,
-            videoPrompt,
-            await uploadImage(firstFrame),
-            ratio
-          );
+          return await getSeaweedVideo(taskId, videoPrompt, firstFrame, ratio);
         default:
           throw new Error("Unknown model");
       }
@@ -989,6 +949,8 @@ async function fetchMinimaxTask(taskId: string, resultId: string) {
             resolve({ output: url });
           } else if (data.status === "Fail") {
             reject(data.base_resp.status_msg);
+          } else if (data.code === "task_not_exist") {
+            reject("Task not exist");
           } else {
             if (counter < maxAttempts) {
               counter++;
@@ -1059,8 +1021,6 @@ export async function getPikaVideo(
   prompt: string,
   url: string,
   ratio: number
-  // style: string,
-  // audio: boolean
 ): Promise<any> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -1069,7 +1029,6 @@ export async function getPikaVideo(
         modelVersion: "2.0",
         promptText: prompt,
         duration: 5,
-        // "pikaffect": style,
         options: {
           aspectRatio: ratio,
           frameRate: 24,

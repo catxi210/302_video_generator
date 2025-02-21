@@ -21,16 +21,16 @@ import { VideoSchema } from "./schema";
 type DefaultVideoData = {
   model: string;
   prompt: string;
-  firstFile: null | File;
-  lastFile: null | File;
-  firstFrame: null | File;
-  lastFrame: null | File;
-  thirdFile: null | File;
-  thirdFrame: null | File;
-  referenceImage1: null | File;
-  referenceImage2: null | File;
-  referenceImage3: null | File;
-  referenceImage4: null | File;
+  firstFile: null | string;
+  lastFile: null | string;
+  thirdFile: null | string;
+  firstFrame: null | string;
+  lastFrame: null | string;
+  thirdFrame: null | string;
+  referenceImage1: null | string;
+  referenceImage2: null | string;
+  referenceImage3: null | string;
+  referenceImage4: null | string;
   ratio?: string;
   type?: string;
   time?: string;
@@ -385,6 +385,7 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   // Handle form submit
   const _onSubmit = (data: DefaultVideoData) => {
+    // console.log("_onSubmit:::", data);
     const filteredData = Object.fromEntries(
       Object.entries(data).filter(([key]) => showFields.includes(key))
     );
@@ -393,14 +394,15 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
 
   // Handle crop submit
   const handleCropConfirm = (data: {
-    firstFrame: File | null;
-    lastFrame: File | null;
-    thirdFrame: File | null;
+    firstFrame: string | null;
+    lastFrame: string | null;
+    thirdFrame: string | null;
     ratio: string;
   }) => {
     Object.entries(data).forEach(([key, value]) => {
       setValue(key as VideoFormKey, value);
     });
+    // console.log("data:::", data);
     handleSubmit(_onSubmit)();
   };
 
@@ -495,9 +497,9 @@ const VideoForm = ({ className, disabled = false }: VideoFormProps) => {
         <ImageCropper
           disable={disabled || !isReady}
           ratioOptions={ratioOptions}
-          originFirstFile={showFields.includes("firstFile") ? firstFile : null}
-          originLastFile={showFields.includes("lastFile") ? lastFile : null}
-          originThirdFile={showFields.includes("thirdFile") ? thirdFile : null}
+          originFirstUrl={showFields.includes("firstFile") ? firstFile : null}
+          originLastUrl={showFields.includes("lastFile") ? lastFile : null}
+          originThirdUrl={showFields.includes("thirdFile") ? thirdFile : null}
           resize={isResize}
           confirm={handleCropConfirm}
         />

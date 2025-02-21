@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const FileSchema = typeof File === "undefined" ? z.any() : z.instanceof(File);
+// const FileSchema = typeof File === "undefined" ? z.any() : z.instanceof(File);
 
 export type VideoFormKey =
   | "model"
@@ -32,16 +32,16 @@ export type VideoFormKey =
 export const VideoSchema = z.object({
   model: z.string().optional(),
   prompt: z.string().optional(),
-  firstFile: z.union([FileSchema, z.null()]).optional(),
-  lastFile: z.union([FileSchema, z.null()]).optional(),
-  firstFrame: z.union([FileSchema, z.null()]).optional(),
-  lastFrame: z.union([FileSchema, z.null()]).optional(),
-  thirdFile: z.union([FileSchema, z.null()]).optional(),
-  thirdFrame: z.union([FileSchema, z.null()]).optional(),
-  referenceImage1: z.union([FileSchema, z.null()]).optional(),
-  referenceImage2: z.union([FileSchema, z.null()]).optional(),
-  referenceImage3: z.union([FileSchema, z.null()]).optional(),
-  referenceImage4: z.union([FileSchema, z.null()]).optional(),
+  firstFile: z.string().or(z.null()).optional(),
+  lastFile: z.string().or(z.null()).optional(),
+  firstFrame: z.string().or(z.null()).optional(),
+  lastFrame: z.string().or(z.null()).optional(),
+  thirdFile: z.string().or(z.null()).optional(),
+  thirdFrame: z.string().or(z.null()).optional(),
+  referenceImage1: z.string().or(z.null()).optional(),
+  referenceImage2: z.string().or(z.null()).optional(),
+  referenceImage3: z.string().or(z.null()).optional(),
+  referenceImage4: z.string().or(z.null()).optional(),
   ratio: z.string().optional(),
   type: z.string().optional(),
   time: z.string().optional(),

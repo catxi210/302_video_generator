@@ -39,5 +39,8 @@
     "code_invalid": "Invalid share code, for more please visit 302.AI",
     "tool_disabled": "This tool is disabled, for more please visit 302.AI",
     "tool_deleted": "This tool has been deleted, for more please visit 302.AI"
+  },
+  "status": {
+    "uploading": "Uploading..."
   }
 }

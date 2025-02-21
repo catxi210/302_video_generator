@@ -15,22 +15,23 @@ import { Button } from "@/components/ui/button";
 import { OptionProps } from "@/constants/options";
 import { useClientTranslation } from "@/hooks/global";
 import FileManager from "@/lib/file";
+import { uploadImage } from "@/services/global";
 
 import CropBox from "./crop-box";
 import CropRatio from "./crop-ratio";
 
 interface ImageCropperConfirmData {
-  firstFrame: File | null;
-  lastFrame: File | null;
-  thirdFrame: File | null;
+  firstFrame: string | null;
+  lastFrame: string | null;
+  thirdFrame: string | null;
   ratio: string;
 }
 
 interface ImageCropperProps {
   disable: boolean;
-  originFirstFile: File | null;
-  originLastFile: File | null;
-  originThirdFile: File | null;
+  originFirstUrl: string | null;
+  originLastUrl: string | null;
+  originThirdUrl: string | null;
   ratioOptions: OptionProps[];
   resize: boolean;
   confirm: ({
@@ -45,9 +46,9 @@ export const ImageCropper = ({
   disable,
   resize,
   ratioOptions,
-  originFirstFile,
-  originLastFile,
-  originThirdFile,
+  originFirstUrl,
+  originLastUrl,
+  originThirdUrl,
   confirm,
 }: ImageCropperProps) => {
   const [ratio, setRatio] = useState(ratioOptions[0].value);
@@ -67,35 +68,33 @@ export const ImageCropper = ({
   }, [ratioOptions]);
 
   useEffect(() => {
-    if (originFirstFile) {
-      const src = URL.createObjectURL(originFirstFile);
-      setFirstSrc(src);
+    if (originFirstUrl) {
+      setFirstSrc(originFirstUrl);
     } else {
       setFirstSrc("");
       setFirstCanvas(null);
     }
-    if (originLastFile) {
-      const src = URL.createObjectURL(originLastFile);
-      setLastSrc(src);
+    if (originLastUrl) {
+      setLastSrc(originLastUrl);
     } else {
       setLastSrc("");
       setLastCanvas(null);
     }
-    if (originThirdFile) {
-      const src = URL.createObjectURL(originThirdFile);
-      setThirdSrc(src);
+    if (originThirdUrl) {
+      setThirdSrc(originThirdUrl);
     } else {
       setThirdSrc("");
       setThirdCanvas(null);
     }
-  }, [originFirstFile, originLastFile, originThirdFile]);
+  }, [originFirstUrl, originLastUrl, originThirdUrl]);
 
   const handleComfirm = async () => {
-    let firstFrame: File | null = null;
-    let lastFrame: File | null = null;
-    let thirdFrame: File | null = null;
+    let firstFrame: string | null = firstSrc;
+    let lastFrame: string | null = lastSrc;
+    let thirdFrame: string | null = thirdSrc;
     let local = "";
     if (firstCanvas) {
+      // console.log("firstCanvas:::", firstCanvas);
       if (resize) {
         const size = ratio.split(":");
         const newCanvas = (await FileManager.resetSizeCanvas(firstCanvas, {
@@ -107,7 +106,9 @@ export const ImageCropper = ({
         local = firstCanvas.toDataURL();
       }
       await FileManager.loadImage(local);
-      firstFrame = (await FileManager.imageToFile(local)) as File;
+      firstFrame = await uploadImage(
+        (await FileManager.imageToFile(local)) as File
+      );
     }
     if (lastCanvas) {
       if (resize) {
@@ -121,7 +122,9 @@ export const ImageCropper = ({
         local = lastCanvas.toDataURL();
       }
       await FileManager.loadImage(local);
-      lastFrame = (await FileManager.imageToFile(local)) as File;
+      lastFrame = await uploadImage(
+        (await FileManager.imageToFile(local)) as File
+      );
     }
     if (thirdCanvas) {
       if (resize) {
@@ -135,7 +138,9 @@ export const ImageCropper = ({
         local = thirdCanvas.toDataURL();
       }
       await FileManager.loadImage(local);
-      thirdFrame = (await FileManager.imageToFile(local)) as File;
+      thirdFrame = await uploadImage(
+        (await FileManager.imageToFile(local)) as File
+      );
     }
     // confirm
     confirm({ firstFrame, lastFrame, thirdFrame, ratio });

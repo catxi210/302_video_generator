@@ -3,10 +3,10 @@ import { StateCreator } from "zustand";
 interface VideoFormData {
   model: string;
   prompt?: string;
-  firstFile?: null | File;
-  lastFile?: null | File;
-  firstFrame?: null | File;
-  lastFrame?: null | File;
+  firstFile?: null | string;
+  lastFile?: null | string;
+  firstFrame?: null | string;
+  lastFrame?: null | string;
   raio?: string;
   type?: string;
   time?: string;
