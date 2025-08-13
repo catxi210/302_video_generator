@@ -3,9 +3,80 @@
 import { apiFetch } from "@/lib/api";
 import { isEnglish } from "@/lib/utils";
 import { useTaskStore } from "@/stores";
-import { Task, TaskResult } from "@/stores/slices/task-slice";
+import type { Task, TaskResult } from "@/stores/slices/task-slice";
 
 import { aiImageToText, aiTranslate } from "./global";
+import { Kling21Data, getKling21Video } from "./model-apis/kling21-api";
+import {
+  MiniMaxHailuo02Data,
+  getMiniMaxHailuo02Video,
+} from "./model-apis/mini-max-hailuo-02-api";
+import { MJVideoData, getMJVideo } from "./model-apis/mj-video-api";
+import { PikaData, getPikaVideo } from "./model-apis/pika-api";
+import { Veo3Data, getVeo3Video } from "./model-apis/veo3-api";
+import { Veo3FastData, getVeo3FastVideo } from "./model-apis/veo3-fast-api";
+import { Veo3ProData, getVeo3ProVideo } from "./model-apis/veo3-pro-api";
+import {
+  Veo3ProFramesData,
+  getVeo3ProFramesVideo,
+} from "./model-apis/veo3-pro-frames-api";
+
+interface HiggsfieldData {
+  taskId: string;
+  higgsfieldMix: boolean;
+  higgsfieldMotion1: string;
+  higgsfieldMotion2: string;
+  higgsfieldMotionStrength1: number;
+  higgsfieldMotionStrength2: number;
+  higgsfieldStartFrame: string;
+  higgsfieldEndFrame: string;
+  higgsfieldPrompt: string;
+  higgsfieldModel: string;
+  higgsfieldTime: string;
+}
+
+interface ViduV2Data {
+  taskId: string;
+  viduV2Model: string;
+  viduV2Type: string;
+  viduV2Prompt: string;
+  viduV2Image: string;
+  viduV2StartFrame: string;
+  viduV2EndFrame: string;
+  viduV2ReferenceImage1: string;
+  viduV2ReferenceImage2: string;
+  viduV2ReferenceImage3: string;
+  viduV2Duration: string;
+  viduV2Resolution: string;
+  viduV2Scene: string;
+  viduV2MovementAmplitude: string;
+  viduV2AspectRatio: string;
+  viduV2Style: string;
+}
+
+interface KlingV2Data {
+  taskId: string;
+  klingV2Type: string;
+  klingV2Image: string;
+  klingV2Prompt: string;
+  klingV2NegativePrompt: string;
+  klingV2Cfg: number;
+  klingV2AspectRatio: string;
+  klingV2Duration: string;
+}
+
+interface SeedanceData {
+  taskId: string;
+  seedanceType: string;
+  seedanceModel: string;
+  seedanceText: string;
+  seedanceReslution: string;
+  seedanceRatio: string;
+  seedanceWm: string;
+  seedanceCf: string;
+  seedanceImage: string;
+  seedanceDuration: string;
+}
 
 // Generate Video Fetch
 export const generateVideo = async (task: Task): Promise<TaskResult> => {
@@ -34,6 +105,56 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
       viduTime = "",
       viduResolution = "",
       viduScene = "",
+      // higgsfield
+      higgsfieldMix = false,
+      higgsfieldMotion1 = "",
+      higgsfieldMotion2 = "",
+      higgsfieldMotionStrength1 = 0.85,
+      higgsfieldMotionStrength2 = 0.85,
+      higgsfieldStartFrame = null,
+      higgsfieldEndFrame = null,
+      higgsfieldPrompt = "",
+      higgsfieldModel = "",
+      higgsfieldTime = "3s",
+      // vidu v2
+      viduV2Model = "",
+      viduV2Type = "",
+      viduV2Prompt = "",
+      viduV2Image = null,
+      viduV2StartFrame = null,
+      viduV2EndFrame = null,
+      viduV2ReferenceImage1 = null,
+      viduV2ReferenceImage2 = null,
+      viduV2ReferenceImage3 = null,
+      viduV2Duration = "",
+      viduV2Resolution = "",
+      viduV2Scene = "",
+      viduV2MovementAmplitude = "",
+      viduV2AspectRatio = ":9",
+      viduV2Style = "",
+      // kling v2
+      klingV2Type = "",
+      klingV2Image = null,
+      klingV2Prompt = "",
+      klingV2NegativePrompt = "",
+      klingV2Cfg = 0.5,
+      klingV2AspectRatio = "",
+      klingV2Duration = "",
+      // veo 3
+      veo3Prompt = "",
+      veo3AspectRatio = "",
+      veo3EnhancePrompt = true,
+      veo3GenerateAudio = true,
+      // Seedance
+      seedanceType = "",
+      seedanceText = "",
+      seedanceModel = "",
+      seedanceReslution = "",
+      seedanceRatio = "",
+      seedanceWm = "",
+      seedanceCf = "",
+      seedanceImage = null,
+      seedanceDuration = "",
     } = task.payload;
 
     // init reference image list
@@ -54,7 +175,24 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
 
     // Derive the video prompt based on available files
     let videoPrompt = prompt;
-    if (!["pixverse", "seaweed"].includes(model)) {
+    if (
+      ![
+        "pixverse",
+        "seaweed",
+        "higgsfield",
+        "vidu_2",
+        "kling_2",
+        "veo3",
+        "veo3_pro_frames",
+        "veo3_pro",
+        "veo3_fast",
+        "seedance",
+        "minimaxi_hailuo_02",
+        "mj_video",
+        "pika",
+        "kling_21",
+      ].includes(model)
+    ) {
       videoPrompt = prompt
         ? await translatedPrompt()
         : firstFrame
@@ -65,6 +203,167 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
     // Process video creation based on the specified model
     const createVideo = async () => {
       switch (model) {
+        case "kling_21": {
+          const schema: Kling21Data = {
+            taskId,
+            klingV21Type: task.payload.klingV21Type,
+            klingV21Version: task.payload.klingV21Version,
+            klingV21Image: task.payload.klingV21Image,
+            klingV21Prompt: task.payload.klingV21Prompt,
+            klingV21NegativePrompt: task.payload.klingV21NegativePrompt,
+            klingV21Cfg: task.payload.klingV21Cfg,
+            klingV21AspectRatio: task.payload.klingV21AspectRatio,
+            klingV21Duration: task.payload.klingV21Duration,
+          };
+          return await getKling21Video(schema);
+        }
+        case "mj_video": {
+          const schema: MJVideoData = {
+            taskId,
+            mjVideoPrompt: task.payload.mjVideoPrompt,
+            mjVideoMotion: task.payload.mjVideoMotion,
+            mjVideoImage: task.payload.mjVideoImage,
+          };
+          return await getMJVideo(schema);
+        }
+        case "veo3_pro": {
+          let veo3ProPromptValue = task.payload.veo3ProPrompt;
+          if (!isEnglish(veo3ProPromptValue)) {
+            veo3ProPromptValue = await aiTranslate(veo3ProPromptValue);
+          }
+          const schema: Veo3ProData = {
+            taskId,
+            veo3ProPrompt: veo3ProPromptValue,
+          };
+          console.log("veo3ProPromptValue:::", veo3ProPromptValue);
+          return await getVeo3ProVideo(schema);
+        }
+        case "veo3_pro_frames": {
+          let veo3ProFramesPromptValue = task.payload.veo3ProFramesPrompt;
+          if (!isEnglish(veo3ProFramesPromptValue)) {
+            veo3ProFramesPromptValue = await aiTranslate(
+              veo3ProFramesPromptValue
+            );
+          }
+          const schema: Veo3ProFramesData = {
+            taskId,
+            veo3ProFramesPrompt: veo3ProFramesPromptValue,
+            veo3ProFramesImage: task.payload.veo3ProFramesImage,
+          };
+          console.log("veo3ProFramesPromptValue:::", veo3ProFramesPromptValue);
+          return await getVeo3ProFramesVideo(schema);
+        }
+        case "veo3_fast": {
+          let veo3FastPromptValue = task.payload.veo3FastPrompt;
+          if (!isEnglish(veo3FastPromptValue)) {
+            veo3FastPromptValue = await aiTranslate(veo3FastPromptValue);
+          }
+          const schema: Veo3FastData = {
+            taskId,
+            veo3FastPrompt: veo3FastPromptValue,
+          };
+          console.log("veo3FastPromptValue:::", veo3FastPromptValue);
+          return await getVeo3FastVideo(schema);
+        }
+        case "minimaxi_hailuo_02": {
+          let minimaxiHailuoPromptValue = task.payload.minimaxiHailuoPrompt;
+          if (!isEnglish(minimaxiHailuoPromptValue)) {
+            minimaxiHailuoPromptValue = await aiTranslate(
+              minimaxiHailuoPromptValue
+            );
+          }
+          const schema: MiniMaxHailuo02Data = {
+            taskId,
+            minimaxiHailuoPrompt: minimaxiHailuoPromptValue,
+            minimaxiHailuoPromptOptimizer:
+              task.payload.minimaxiHailuoPromptOptimizer,
+            minimaxiHailuoDuration: task.payload.minimaxiHailuoDuration,
+            minimaxiHailuoResolution: task.payload.minimaxiHailuoResolution,
+            minimaxiHailuoFirstFrameImage:
+              task.payload.minimaxiHailuoFirstFrameImage,
+          };
+          return await getMiniMaxHailuo02Video(schema);
+        }
+        case "seedance": {
+          const schema: SeedanceData = {
+            taskId,
+            seedanceType,
+            seedanceModel,
+            seedanceText,
+            seedanceReslution,
+            seedanceRatio,
+            seedanceWm,
+            seedanceCf,
+            seedanceImage,
+            seedanceDuration,
+          };
+          return await getSeedanceVideo(schema);
+        }
+        case "veo3": {
+          let veo3PromptValue = veo3Prompt;
+          if (!isEnglish(veo3Prompt)) {
+            veo3PromptValue = await aiTranslate(veo3Prompt);
+          }
+          const schema: Veo3Data = {
+            taskId,
+            veo3Prompt: veo3PromptValue,
+            veo3AspectRatio,
+            veo3EnhancePrompt,
+            veo3GenerateAudio,
+          };
+          return await getVeo3Video(schema);
+        }
+        case "kling_2": {
+          const schema: KlingV2Data = {
+            taskId,
+            klingV2Type,
+            klingV2Image,
+            klingV2Prompt,
+            klingV2NegativePrompt,
+            klingV2Cfg,
+            klingV2AspectRatio,
+            klingV2Duration,
+          };
+          return await getKlingV2Video(schema);
+        }
+        case "vidu_2": {
+          const schema: ViduV2Data = {
+            taskId,
+            viduV2Model,
+            viduV2Type,
+            viduV2Prompt,
+            viduV2Image,
+            viduV2StartFrame,
+            viduV2EndFrame,
+            viduV2ReferenceImage1,
+            viduV2ReferenceImage2,
+            viduV2ReferenceImage3,
+            viduV2Duration,
+            viduV2Resolution,
+            viduV2Scene,
+            viduV2MovementAmplitude,
+            viduV2AspectRatio,
+            viduV2Style,
+          };
+          return await getViduV2Video(schema);
+        }
+        case "higgsfield": {
+          const schema: HiggsfieldData = {
+            taskId,
+            higgsfieldMix,
+            higgsfieldMotion1,
+            higgsfieldMotion2,
+            higgsfieldMotionStrength1,
+            higgsfieldMotionStrength2,
+            higgsfieldStartFrame,
+            higgsfieldEndFrame,
+            higgsfieldPrompt,
+            higgsfieldModel,
+            higgsfieldTime,
+          };
+          return await getHiggsfieldVideo(schema);
+        }
+
         case "luma":
           return await getLumaVideo(
             taskId,
@@ -145,14 +444,16 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
             firstFrame
           );
 
-        case "pika":
-          const ratioValue = ratio.split(":")[0] / ratio.split(":")[1];
-          return await getPikaVideo(
+        case "pika": {
+          const schema: PikaData = {
             taskId,
-            videoPrompt,
-            firstFrame,
-            ratioValue
-          );
+            pikaImage: task.payload.pikaImage,
+            pikaPrompt: task.payload.pikaPrompt,
+            pikaNegativePrompt: task.payload.pikaNegativePrompt,
+            pikaAffects: task.payload.pikaAffects,
+          };
+          return await getPikaVideo(schema);
+        }
 
         case "genmo":
           return await getGenmoVideo(taskId, await translatedPrompt());
@@ -189,7 +490,7 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
             ratio
           );
 
-        case "vidu":
+        case "vidu": {
           let mergeFrame = null;
           if (firstFrame && lastFrame && viduType === "scene") {
             const canvas = document.createElement("canvas");
@@ -200,6 +501,7 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
               const url = URL.createObjectURL(image);
               const img = new Image();
               img.src = url;
+              // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
               await new Promise((resolve) => (img.onload = resolve));
               const canvas = document.createElement("canvas");
               canvas.width = img.width;
@@ -219,6 +521,7 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
             ctx.drawImage(firstFrameImage, 0, 0);
             ctx.drawImage(lastFrameImage, firstFrameImage.width, 0);
             mergeFrame = new File(
+              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
               [await new Promise((resolve) => canvas.toBlob(resolve as any))],
               "merged.png",
               {
@@ -241,6 +544,7 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
             viduResolution,
             viduScene
           );
+        }
         case "seaweed":
           return await getSeaweedVideo(taskId, videoPrompt, firstFrame, ratio);
         default:
@@ -249,6 +553,13 @@ export const generateVideo = async (task: Task): Promise<TaskResult> => {
     };
 
     const res = await createVideo();
+
+    if (res.output && Array.isArray(res.output)) {
+      return {
+        resultId: res.id || "",
+        videoUrls: res.output,
+      };
+    }
 
     // Validate and return result
     return res.output
@@ -274,6 +585,7 @@ export const extendVideo = async (task: Task): Promise<TaskResult> => {
   } = task;
 
   try {
+    // biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
     let res;
 
     if (extendType === "time") {
@@ -366,6 +678,460 @@ export const extendVideo = async (task: Task): Promise<TaskResult> => {
   }
 };
 
+const SEEDANCE_URL = "doubao/doubao-seedance";
+export async function getSeedanceVideo(schema: SeedanceData) {
+  const {
+    taskId,
+    seedanceType,
+    seedanceModel,
+    seedanceText,
+    seedanceReslution,
+    seedanceRatio,
+    seedanceWm,
+    seedanceCf,
+    seedanceDuration,
+    seedanceImage,
+  } = schema;
+
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const createTask = async (data: any, url: string) => {
+    // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
+    return new Promise(async (resolve, reject) => {
+      try {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let result: any = {};
+        const res = await apiFetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) {
+          throw await res.json();
+        }
+        result = await res.json();
+        console.debug("Seedance result", result);
+        result = await fetchSeedanceTask(taskId, result.id);
+        console.debug("Seedance final result", result);
+        resolve({ output: result.content.video_url });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  switch (seedanceType) {
+    case "text_to_video": {
+      const data = {
+        model:
+          seedanceModel === "pro"
+            ? "doubao-seedance-1-0-pro-250528"
+            : "doubao-seedance-1-0-lite-t2v-250428",
+        content: [
+          {
+            type: "text",
+            text: `${seedanceText} --resolution ${seedanceReslution} --seed -1 --ratio ${seedanceRatio} --wm ${seedanceWm} --cf ${seedanceCf} --fps 24 --dur ${seedanceDuration}`,
+          },
+        ],
+      };
+
+      return await createTask(data, SEEDANCE_URL);
+    }
+    case "image_to_video": {
+      const data = {
+        model:
+          seedanceModel === "pro"
+            ? "doubao-seedance-1-0-pro-250528"
+            : "doubao-seedance-1-0-lite-i2v-250428",
+        content: [
+          {
+            type: "text",
+            text: `${seedanceText} --resolution ${seedanceReslution} --seed -1 --ratio adaptive --wm ${seedanceWm} --cf ${seedanceCf} --fps 24 --dur ${seedanceDuration}`,
+          },
+          {
+            type: "image_url",
+            image_url: { url: seedanceImage },
+          },
+        ],
+      };
+      return await createTask(data, SEEDANCE_URL);
+    }
+  }
+}
+
+export async function fetchSeedanceTask(taskId: string, resultId: string) {
+  return new Promise((resolve, reject) => {
+    let counter = 0;
+    const maxAttempts = 60;
+
+    const polling = (taskId: string, resultId: string) => {
+      apiFetch(`doubao/doubao-seedance/${resultId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Seedance task result", data);
+          if (data.status === "succeeded") {
+            resolve(data);
+          } else if (data.status === "failed") {
+            reject("Fetch task failed");
+          } else {
+            if (counter < maxAttempts) {
+              counter++;
+              setTimeout(() => polling(taskId, resultId), 10000); // 每隔10秒轮询一次
+            }
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    };
+    polling(taskId, resultId);
+  });
+}
+
+const KLING_V2_TEXT_TO_VIDEO_URL = "klingai/m2v_20_txt2video_hq_5s";
+const KLING_V2_IMAGE_TO_VIDEO_5S_URL = "klingai/m2v_20_img2video_hq_5s";
+const KLING_V2_IMAGE_TO_VIDEO_10S_URL = "klingai/m2v_20_img2video_hq_10s";
+// 视频: Kling V2
+export async function getKlingV2Video(schema: KlingV2Data) {
+  const {
+    taskId,
+    klingV2Type,
+    klingV2Image,
+    klingV2Prompt,
+    klingV2NegativePrompt,
+    klingV2Cfg,
+    klingV2AspectRatio,
+    klingV2Duration,
+  } = schema;
+
+  console.log("klingV2", schema);
+
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const createTask = async (data: any, url: string) => {
+    // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
+    return new Promise(async (resolve, reject) => {
+      try {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let result: any = {};
+        const res = await apiFetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) {
+          throw await res.json();
+        }
+        result = await res.json();
+        console.debug("Kling V2 result", result);
+        result = await fetchKlingTask(taskId, result.data.task.id);
+        console.debug("Kling V2 final result", result);
+        resolve({ output: result.video });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  switch (klingV2Type) {
+    case "text_to_video":
+      return await createTask(
+        {
+          prompt: klingV2Prompt,
+          negative_prompt: klingV2NegativePrompt,
+          cfg: klingV2Cfg,
+          aspect_ratio: klingV2AspectRatio,
+        },
+        KLING_V2_TEXT_TO_VIDEO_URL
+      );
+    case "image_to_video": {
+      // 将imageURL
+      if (klingV2Duration === "5") {
+        return await createTask(
+          {
+            input_image: klingV2Image,
+            prompt: klingV2Prompt,
+            negative_prompt: klingV2NegativePrompt,
+            cfg: klingV2Cfg,
+            aspect_ratio: klingV2AspectRatio,
+          },
+          KLING_V2_IMAGE_TO_VIDEO_5S_URL
+        );
+      }
+      if (klingV2Duration === "10") {
+        return await createTask(
+          {
+            input_image: klingV2Image,
+            prompt: klingV2Prompt,
+            negative_prompt: klingV2NegativePrompt,
+            cfg: klingV2Cfg,
+            aspect_ratio: klingV2AspectRatio,
+          },
+          KLING_V2_IMAGE_TO_VIDEO_10S_URL
+        );
+      }
+    }
+  }
+}
+
+const IMAGE_TO_VIDEO_URL = "vidu/ent/v2/img2video";
+const START_END_TO_VIDEO_URL = "vidu/ent/v2/start-end2video";
+const REFERENCE_TO_VIDEO_URL = "vidu/ent/v2/reference2video";
+const TEXT_TO_VIDEO_URL = "vidu/ent/v2/text2video";
+// const SCENE_TO_VIDEO_URL = "vidu/ent/v2/template2video";
+// 视频: Vidu V2
+export async function getViduV2Video(schema: ViduV2Data) {
+  const {
+    taskId,
+    viduV2Model,
+    viduV2Type,
+    viduV2Prompt,
+    viduV2Image,
+    viduV2StartFrame,
+    viduV2EndFrame,
+    viduV2ReferenceImage1,
+    viduV2ReferenceImage2,
+    viduV2ReferenceImage3,
+    viduV2Duration,
+    viduV2Resolution,
+    viduV2MovementAmplitude,
+    viduV2AspectRatio,
+    viduV2Style,
+  } = schema;
+
+  const createTask = async (
+    data: { model: string } & Partial<ViduV2Data>,
+    url: string
+  ) => {
+    // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
+    return new Promise(async (resolve, reject) => {
+      try {
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let result: any = {};
+        const res = await apiFetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) {
+          throw await res.json();
+        }
+        result = await res.json();
+        console.debug("Vidu V2 result", result);
+        result = await fetchViduV2Task(taskId, result.task_id);
+        console.debug("Vidu V2 final result", result);
+        resolve({ output: result.creations[0].url });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  switch (viduV2Type) {
+    case "image_to_video": {
+      const data = {
+        model: viduV2Model,
+        images: [viduV2Image],
+        prompt: viduV2Prompt,
+        duration: Number.parseInt(viduV2Duration),
+        resolution: viduV2Resolution,
+        movement_amplitude: viduV2MovementAmplitude,
+      };
+      return await createTask(data, IMAGE_TO_VIDEO_URL);
+    }
+    case "head_tail_to_video": {
+      const data = {
+        model: viduV2Model,
+        images: [viduV2StartFrame, viduV2EndFrame],
+        prompt: viduV2Prompt,
+        duration: Number.parseInt(viduV2Duration),
+        resolution: viduV2Resolution,
+        movement_amplitude: viduV2MovementAmplitude,
+      };
+      return await createTask(data, START_END_TO_VIDEO_URL);
+    }
+    case "character_to_video": {
+      const data = {
+        model: viduV2Model,
+        images: [
+          viduV2ReferenceImage1,
+          viduV2ReferenceImage2,
+          viduV2ReferenceImage3,
+        ],
+        prompt: viduV2Prompt,
+        duration: Number.parseInt(viduV2Duration),
+        aspect_ratio: viduV2AspectRatio,
+        resolution: viduV2Resolution,
+        movement_amplitude: viduV2MovementAmplitude,
+      };
+      return await createTask(data, REFERENCE_TO_VIDEO_URL);
+    }
+    case "text_to_video": {
+      const data = {
+        model: viduV2Model,
+        prompt: viduV2Prompt,
+        style: viduV2Style,
+        duration: Number.parseInt(viduV2Duration),
+        aspect_ratio: viduV2AspectRatio,
+        resolution: viduV2Resolution,
+        movement_amplitude: viduV2MovementAmplitude,
+      };
+      return await createTask(data, TEXT_TO_VIDEO_URL);
+    }
+  }
+}
+
+export async function fetchViduV2Task(taskId: string, resultId: string) {
+  return new Promise((resolve, reject) => {
+    let counter = 0;
+    const maxAttempts = 60;
+
+    const polling = (taskId: string, resultId: string) => {
+      apiFetch(`vidu/ent/v2/tasks/${resultId}/creations`, {
+        headers: {},
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.state === "success") {
+            resolve(data);
+          } else if (data.state === "failed") {
+            reject("Fetch task failed");
+          } else {
+            if (counter < maxAttempts) {
+              counter++;
+              const { getTask } = useTaskStore.getState();
+              const task = getTask(taskId);
+              if (task) {
+                setTimeout(() => polling(taskId, resultId), 10000); // 每隔10秒轮询一次
+              }
+            } else {
+              reject("Max attempts reached");
+            }
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    };
+    polling(taskId, resultId);
+  });
+}
+
+// 视频: Higgsfield
+export async function getHiggsfieldVideo(
+  schema: HiggsfieldData
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+): Promise<any> {
+  const {
+    taskId,
+    higgsfieldMix,
+    higgsfieldMotion1,
+    higgsfieldMotion2,
+    higgsfieldMotionStrength1,
+    higgsfieldMotionStrength2,
+    higgsfieldStartFrame,
+    higgsfieldEndFrame,
+    higgsfieldPrompt,
+    higgsfieldModel,
+    higgsfieldTime,
+  } = schema;
+
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
+  return new Promise(async (resolve, reject) => {
+    try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+      let result: any = {};
+      const data = {
+        input_image: higgsfieldStartFrame,
+        ...(higgsfieldEndFrame ? { input_image_end: higgsfieldEndFrame } : {}),
+        model: higgsfieldModel,
+        motions: higgsfieldMix
+          ? [
+              {
+                motion_id: higgsfieldMotion1,
+                strength: higgsfieldMotionStrength1,
+              },
+              {
+                motion_id: higgsfieldMotion2,
+                strength: higgsfieldMotionStrength2,
+              },
+            ]
+          : [
+              {
+                motion_id: higgsfieldMotion1,
+                strength: 1,
+              },
+            ],
+        prompt: higgsfieldPrompt,
+        seconds: Number.parseInt(higgsfieldTime),
+      };
+
+      console.debug("higgsfield data", data);
+
+      const res = await apiFetch("higgsfield/image2video", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        throw await res.json();
+      }
+      result = await res.json();
+      console.debug("higgsfield result", result);
+      result = await fetchHiggsfieldTask(taskId, result.id);
+      resolve({ output: result.result.url, id: result.id });
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+export async function fetchHiggsfieldTask(taskId: string, resultId: string) {
+  return new Promise((resolve, reject) => {
+    let counter = 0;
+    const maxAttempts = 60;
+
+    const polling = (taskId: string, resultId: string) => {
+      apiFetch(`higgsfield/task/${resultId}/fetch`, {
+        headers: {},
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "completed") {
+            resolve(data);
+          } else if (data.status === "failed") {
+            reject("Fetch task failed");
+          } else {
+            if (counter < maxAttempts) {
+              counter++;
+              const { getTask } = useTaskStore.getState();
+              const task = getTask(taskId);
+              if (task) {
+                setTimeout(() => polling(taskId, resultId), 10000); // 每隔10秒轮询一次
+              }
+            } else {
+              reject("Max attempts reached");
+            }
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    };
+    polling(taskId, resultId);
+  });
+}
+
 // 视频: Luma
 export async function getLumaVideo(
   taskId: string,
@@ -373,9 +1139,12 @@ export async function getLumaVideo(
   firstFrame: File | null,
   lastFrame: File | null,
   loop: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const formData = new FormData();
@@ -415,7 +1184,7 @@ export async function getLumaVideo(
 async function fetchLumaTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(`luma/task/${resultId}/fetch`, {
@@ -457,9 +1226,12 @@ export async function extendLumaVideo(
   taskId: string,
   key: string,
   prompt: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const formData = new FormData();
@@ -498,9 +1270,12 @@ export async function getKlingVideo(
   time: string,
   version: string,
   imageList: string[]
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       let path = "";
       let url = "";
@@ -562,12 +1337,12 @@ export async function getKlingVideo(
       };
 
       if (firstFrame) {
-        data["input_image"] = firstFrame;
+        data.input_image = firstFrame;
         if (lastFrame) {
-          data["tail_image"] = lastFrame;
+          data.tail_image = lastFrame;
         }
       } else if (imageList.length > 0) {
-        data["image_list"] = imageList;
+        data.image_list = imageList;
       }
 
       const res = await apiFetch(url, {
@@ -606,9 +1381,12 @@ export async function extendKlingVideo(
   taskId: string,
   key: string,
   prompt: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const url = "klingai/m2v_extend_video";
@@ -644,7 +1422,7 @@ export async function extendKlingVideo(
 async function fetchKlingTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(
@@ -691,9 +1469,12 @@ export async function getRunwayVideo(
   lastFrame: File,
   time: string,
   type: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       const file = firstFrame || lastFrame;
       const url =
@@ -746,7 +1527,7 @@ export async function getRunwayVideo(
 async function fetchRunwayTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(
@@ -793,9 +1574,12 @@ export async function getCogVideo(
   audio: string,
   time: string,
   ratio: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       let raw = "";
       if (url) {
@@ -846,7 +1630,7 @@ export async function getCogVideo(
 async function fetchCogTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(`zhipu/api/paas/v4/async-result/${resultId}`, {
@@ -889,10 +1673,14 @@ export async function getMinimaxVideo(
   model: string,
   prompt: string,
   url: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let data: any = {};
       data = {
         model: model,
@@ -932,7 +1720,7 @@ export async function getMinimaxVideo(
 async function fetchMinimaxTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(`minimaxi/v1/query/video_generation?task_id=${resultId}`, {
@@ -1015,145 +1803,16 @@ async function fetchMinimaxFile(resultId: string, fileId: string) {
   });
 }
 
-// 视频: Pika
-export async function getPikaVideo(
-  taskId: string,
-  prompt: string,
-  url: string,
-  ratio: number
-): Promise<any> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let result: any = {};
-      let data: any = {
-        modelVersion: "2.0",
-        promptText: prompt,
-        duration: 5,
-        options: {
-          aspectRatio: ratio,
-          frameRate: 24,
-        },
-      };
-
-      if (url) {
-        data = {
-          modelVersion: "2.0",
-          promptText: prompt,
-          duration: 5,
-          options: {
-            aspectRatio: ratio,
-            frameRate: 24,
-          },
-          image: url,
-        };
-      }
-
-      const res = await apiFetch("pika/generate", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json;charset:utf-8;",
-        },
-      });
-      if (!res.ok) {
-        throw await res.json();
-      }
-
-      const jsonData = await res.json();
-
-      result = await fetchPikaTask(taskId, jsonData.data.id);
-      resolve({ output: result.videoUrl });
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
-
-// 查询: Pika
-async function fetchPikaTask(taskId: string, resultId: string) {
-  return new Promise((resolve, reject) => {
-    let counter = 0;
-    const maxAttempts = 120;
-
-    const polling = (taskId: string, resultId: string) => {
-      apiFetch(
-        `pika/task/${resultId}/fetch
-      `,
-        {
-          headers: {},
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-            return;
-          }
-          if (data.data.status === "finished") {
-            resolve(data.data);
-          } else {
-            if (counter < maxAttempts) {
-              counter++;
-              const { getTask } = useTaskStore.getState();
-              const task = getTask(taskId);
-              if (task) {
-                setTimeout(() => polling(taskId, resultId), 10000); // 每隔10秒轮询一次
-              }
-            } else {
-              reject("Max attempts reached");
-            }
-          }
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    };
-    polling(taskId, resultId);
-  });
-}
-
-// 拓展: Pika
-export async function extendPikaVideo(
-  taskId: string,
-  key: string,
-  prompt: string
-): Promise<any> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      let result: any = {};
-
-      const formData = new FormData();
-      formData.append("user_prompt", prompt);
-
-      const res = await apiFetch(`luma/extend/${key}`, {
-        method: "POST",
-        body: formData,
-        headers: {},
-      });
-      if (!res.ok) {
-        throw await res.json();
-      }
-
-      result = await res.json();
-      if (result.video) {
-        resolve({ output: result.video, id: result.id });
-        return;
-      }
-      result = await fetchPikaTask(taskId, result.id);
-      resolve({ output: result.video, id: result.id });
-    } catch (error) {
-      reject(error);
-    }
-  });
-}
-
 // 视频: Genmo
 export async function getGenmoVideo(
   taskId: string,
   prompt: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const data = {
@@ -1187,7 +1846,7 @@ export async function getGenmoVideo(
 async function fetchGenmoTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(`302/submit/mochi-v1?request_id=${resultId}`, {
@@ -1227,9 +1886,12 @@ export async function getHaiperVideo(
   taskId: string,
   prompt: string,
   url: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       let raw = "";
       if (url) {
@@ -1317,6 +1979,7 @@ export async function getPixverseVideo(
   prompt: string,
   url: string,
   template: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
   const prompts: Record<string, string> = {
     "304826314164992": "Transform into Hulk and smash everything",
@@ -1355,8 +2018,10 @@ export async function getPixverseVideo(
     "316139945292864": "Squid Game survival challenge", // 鱿鱼游戏
     "317013620689664": "Ingi's mysterious gaze", // 英姬的凝视
   };
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       const raw = JSON.stringify({
         model: "v3",
@@ -1397,7 +2062,7 @@ export async function getPixverseVideo(
 async function fetchPixverseTask(taskId: string, resultId: string) {
   return new Promise((resolve, reject) => {
     let counter = 0;
-    const maxAttempts = 120;
+    const maxAttempts = 60;
 
     const polling = (taskId: string, resultId: string) => {
       apiFetch(`pix/task/${resultId}/fetch`, {
@@ -1437,7 +2102,9 @@ export async function getLightricksVideo(
   taskId: string,
   prompt: string,
   url: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
       let path = "";
@@ -1491,9 +2158,12 @@ export async function getLightricksVideo(
 export async function getHunyuanVideo(
   taskId: string,
   prompt: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       const raw = JSON.stringify({
         prompt: prompt,
@@ -1566,9 +2236,12 @@ export async function getWanxVideo(
   model: string,
   prompt: string,
   size: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       const raw = JSON.stringify({
         model: model,
@@ -1659,9 +2332,12 @@ export async function getViduVideo(
   time: string,
   resolution: string,
   scene: string
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       let path = "";
       let data = {};
@@ -2060,9 +2736,12 @@ export async function extendViduVideo(
   taskId: string,
   resultId: string,
   duration: number
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       const data = {
         type: "upscale",
@@ -2148,8 +2827,10 @@ export async function getSeaweedVideo(
   firstFrame: string,
   ratio: string
 ) {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const content = [];
@@ -2227,10 +2908,13 @@ export async function extendRunwayVideoRatio(
   video: string,
   prompt: string,
   ratio: string,
-  seconds: number = 5
+  seconds = 5
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const formData = new FormData();
@@ -2264,9 +2948,12 @@ export async function extendVideoStyle(
   structure_transformation: number,
   text_prompt?: string,
   seconds?: number
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
 
       const formData = new FormData();
@@ -2307,9 +2994,12 @@ export async function getMmaudioAudio(
   video: string,
   prompt: string
   // seconds: number = 10
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 ): Promise<any> {
+  // biome-ignore lint/suspicious/noAsyncPromiseExecutor: <explanation>
   return new Promise(async (resolve, reject) => {
     try {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       let result: any = {};
       const data = {
         video_url: video,

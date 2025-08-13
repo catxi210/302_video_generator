@@ -1,10 +1,10 @@
 import {
-  AuthFormProps,
+  type AuthFormProps,
   SIGN_IN_FORM,
   VIDEO_FORM,
-  VideoFormProps,
+  type VideoFormProps,
 } from "./forms";
-import { APP_ROUTE_MENU, MenuProps } from "./menus";
+import { APP_ROUTE_MENU, type MenuProps } from "./menus";
 import {
   APP_THEME_OPTION,
   COG_RATIO_OPTION,
@@ -13,7 +13,7 @@ import {
   KLING_RATIO_OPTION, // PIXVERSE_RATIO_OPTION,
   LIGHTRICKS_RATIO_OPTION, // LUMA_RATIO_OPTION,
   MINIMAX_RATIO_OPTION,
-  OptionProps,
+  type OptionProps,
   PIKA_RATIO_OPTION,
   RUNWAY_RATIO_OPTION,
   SEAWEED_RATIO_OPTION,

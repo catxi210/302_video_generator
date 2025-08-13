@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
 
@@ -12,6 +12,12 @@ import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 
 const AppAuth = dynamic(() => import("@/components/global/app-auth"), {
+  ssr: false,
+});
+const AppEvent = dynamic(() => import("@/components/global/app-event"), {
+  ssr: false,
+});
+const AppChat = dynamic(() => import("@/components/global/app-chat"), {
   ssr: false,
 });
 
@@ -53,6 +59,8 @@ const RootLayout = ({
             <AppFooter />
           </AppQeury>
         </AppTheme>
+        <AppEvent />
+        <AppChat />
         <AppMessage />
       </body>
     </html>

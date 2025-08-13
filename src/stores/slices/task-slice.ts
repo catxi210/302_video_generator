@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { produce } from "immer";
-import { StateCreator } from "zustand";
+import type { StateCreator } from "zustand";
 
 export enum TaskType {
   VIDEO_GENERATION = "VIDEO_GENERATION",
@@ -10,7 +10,9 @@ export enum TaskType {
 export interface TaskResult {
   resultId?: string;
   videoUrl?: string;
+  videoUrls?: string[];
   imageUrl?: string;
+  error?: any; // 添加错误字段
 }
 
 // Task interface with an additional result property

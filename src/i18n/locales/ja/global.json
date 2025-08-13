@@ -1,46 +1,47 @@
 {
-  "symbol": "ja",
-  "lang": "日本語",
-  "title": "302.AI",
-  "desc": "あなた自身のAIツールを作成する",
-  "theme": {
-    "light": "日中",
-    "dark": "夜間",
-    "system": "システム"
-  },
-  "system": {
-    "login": "<login>ログイン</login>",
-    "logout": "ログアウト",
-    "notifi": "システム通知",
-    "error": "システムエラー",
-    "confirm": "確認",
-    "cancel": "キャンセル"
-  },
   "about": {
-    "title": "説明",
-    "desc": "AIツールの詳細プレビュー"
+    "desc": "AIツールの詳細プレビュー",
+    "title": "説明"
+  },
+  "desc": "あなた自身のAIツールを作成する",
+  "error": {
+    "code_invalid": "共有コードが間違っています。詳細は 302.AI をご覧ください",
+    "network_error": "ネットワークサービスエラー。ネットワーク状態を確認するか、後でもう一度お試しください！",
+    "not_found": "ページが見つかりません",
+    "tool_deleted": "このツールは削除されました。詳細は 302.AI をご覧ください",
+    "tool_disabled": "このツールは無効です。詳細は 302.AI をご覧ください",
+    "unknown_error": "不明なエラーが発生しました。顧客サービスにお問い合わせください"
   },
   "footer": {
-    "title": "提供元",
-    "desc": "コンテンツはAI生成、参考用"
+    "desc": "コンテンツはAI生成、参考用",
+    "title": "提供元"
   },
   "history": {
-    "title": "履歴",
-    "desc": "すべての履歴はローカルに保存され、アップロードされません",
-    "total": "合計 {{count}} 件の履歴",
-    "empty": "記録がありません",
+    "clear": "クリア",
     "delete": "削除",
-    "clear": "クリア"
+    "desc": "すべての履歴はローカルに保存され、アップロードされません",
+    "empty": "記録がありません",
+    "title": "履歴",
+    "total": "合計 {{count}} 件の履歴"
   },
-  "error": {
-    "not_found": "ページが見つかりません",
-    "unknown_error": "不明なエラーが発生しました。顧客サービスにお問い合わせください",
-    "network_error": "ネットワークサービスエラー。ネットワーク状態を確認するか、後でもう一度お試しください！",
-    "code_invalid": "共有コードが間違っています。詳細は 302.AI をご覧ください",
-    "tool_disabled": "このツールは無効です。詳細は 302.AI をご覧ください",
-    "tool_deleted": "このツールは削除されました。詳細は 302.AI をご覧ください"
-  },
+  "lang": "日本語",
   "status": {
+    "file_type_not_accepted": "現在の形式の画像はサポートされていません。もう一度アップロードしてください",
     "uploading": "アップロード中..."
-  }
+  },
+  "symbol": "ja",
+  "system": {
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "error": "システムエラー",
+    "login": "<login>ログイン</login>",
+    "logout": "ログアウト",
+    "notifi": "システム通知"
+  },
+  "theme": {
+    "dark": "夜間",
+    "light": "日中",
+    "system": "システム"
+  },
+  "title": "302.AI"
 }

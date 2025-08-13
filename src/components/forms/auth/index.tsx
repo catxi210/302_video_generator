@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import type { FormEvent } from "react";
 
 import FormGenerator from "@/components/common/form-generator";
 import { CircleLoader } from "@/components/common/loader-renderer";

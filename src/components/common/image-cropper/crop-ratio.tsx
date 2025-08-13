@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 interface RatioOption {
-  id: number;
+  id: number | string;
   label: string;
   value: string;
 }

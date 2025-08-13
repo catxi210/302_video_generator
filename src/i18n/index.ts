@@ -1,12 +1,12 @@
 import {
-  FlatNamespace,
-  i18n as I18nInstance,
-  InitOptions,
-  KeyPrefix,
+  type FlatNamespace,
+  type i18n as I18nInstance,
+  type InitOptions,
+  type KeyPrefix,
   createInstance,
 } from "i18next";
 import resourcesToBackend from "i18next-resources-to-backend";
-import { FallbackNs } from "react-i18next";
+import type { FallbackNs } from "react-i18next";
 import { initReactI18next } from "react-i18next/initReactI18next";
 
 import { defaultLocale, locales, namespaces } from "@/i18n/config";
@@ -16,7 +16,7 @@ export type UseTranslationOptions = {
 };
 
 const initI18next = async (
-  lng: string = defaultLocale,
+  lng: string,
   ns: string | string[]
 ): Promise<I18nInstance> => {
   const i18nInstance = createInstance();

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -14,9 +13,7 @@ import {
 
 import { defaultLocale, locales, namespaces } from "@/i18n/config";
 
-import { UseTranslationOptions } from "./";
-
-/* eslint-disable react-hooks/rules-of-hooks */
+import type { UseTranslationOptions } from "./";
 
 /* eslint-disable react-hooks/rules-of-hooks */
 

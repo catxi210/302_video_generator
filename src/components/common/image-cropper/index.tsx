@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { OptionProps } from "@/constants/options";
+import type { OptionProps } from "@/constants/options";
 import { useClientTranslation } from "@/hooks/global";
 import FileManager from "@/lib/file";
 import { uploadImage } from "@/services/global";
